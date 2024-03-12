@@ -21,7 +21,7 @@
     * [1.5 Data Exploration](#1.5)
         * [1.5.1 Exploratory Data Analysis](#1.5.1)
         * [1.5.2 Hypothesis Testing](#1.5.2)
-    * [1.6 Neural Network Classification Weight Update](#1.6)
+    * [1.6 Neural Network Classification Gradient and Weight Updates](#1.6)
         * [1.6.1 Premodelling Data Description](#1.6.1)
         * [1.6.2 Sigmoid Activation Function](#1.6.2)
         * [1.6.3 Rectified Linear Unit Activation Function](#1.6.3)
@@ -42,6 +42,8 @@ This project manually implements the **Backpropagation** method using various he
 [Artificial Neural Network](https://link.springer.com/book/10.1007/978-0-387-84858-7), in the context of categorical response prediction, consists of interconnected nodes called neurons organized in layers. The model architecture involves an input layer which receives the input data, with each neuron representing a feature or attribute of the data; hidden layers which perform computations on the input data through weighted connections between neurons and apply activation functions to produce outputs; and the output layer which produces the final predictions equal to the number of classes, each representing the probability of the input belonging to a particular class, based on the computations performed in the hidden layers. Neurons within adjacent layers are connected by weighted connections. Each connection has an associated weight that determines the strength of influence one neuron has on another. These weights are adjusted during the training process to enable the network to learn from the input data and make accurate predictions. Activation functions introduce non-linearities into the network, allowing it to learn complex relationships between inputs and outputs. The training process involves presenting input data along with corresponding target outputs to the network and adjusting the weights to minimize the difference between the predicted outputs and the actual targets which is typically performed through optimization algorithms such as gradient descent and backpropagation. The training process iteratively updates the weights until the model's predictions closely match the target outputs.
 
 [Backpropagation](https://link.springer.com/book/10.1007/978-0-387-84858-7) and [Weight Update](https://link.springer.com/book/10.1007/978-0-387-84858-7), in the context of an artificial neural network, involve the process of iteratively adjusting the weights of the connections between neurons in the network to minimize the difference between the predicted and the actual target responses. Input data is fed into the neural network, and it propagates through the network layer by layer, starting from the input layer, through hidden layers, and ending at the output layer. At each neuron, the weighted sum of inputs is calculated, followed by the application of an activation function to produce the neuron's output. Once the forward pass is complete, the network's output is compared to the actual target output. The difference between the predicted output and the actual output is quantified using a loss function, which measures the discrepancy between the predicted and actual values. Common loss functions for classification tasks include cross-entropy loss. During the backward pass, the error is propagated backward through the network to compute the gradients of the loss function with respect to each weight in the network. This is achieved using the chain rule of calculus, which allows the error to be decomposed and distributed backward through the network. The gradients quantify how much a change in each weight would affect the overall error of the network. Once the gradients are computed, the weights are updated in the opposite direction of the gradient to minimize the error. This update is typically performed using an optimization algorithm such as gradient descent, which adjusts the weights in proportion to their gradients and a learning rate hyperparameter. The learning rate determines the size of the step taken in the direction opposite to the gradient. These steps are repeated for multiple iterations (epochs) over the training data. As the training progresses, the weights are adjusted iteratively to minimize the error, leading to a neural network model that accurately classifies input data.
+
+[Activation Functions](https://link.springer.com/book/10.1007/978-0-387-84858-7) play a crucial role in neural networks by introducing non-linearity into the network, enabling the model to learn complex patterns and relationships within the data. In the context of a neural network classification model, activation functions are applied to the output of each neuron in the hidden layers to introduce non-linear mappings between the input and output, allowing the network to approximate complex functions and make non-linear decisions. Activation functions are significant during model development by introducing non-linearity (without activation functions, the neural network would simply be a series of linear transformations, no matter how many layers it has. Activation functions introduce non-linearities to the model, enabling it to learn and represent complex patterns and relationships in the data); propagating back gradients (activation functions help in the backpropagation algorithm by providing gradients that indicate the direction and magnitude of adjustments to the weights during training. These gradients are necessary for optimizing the network's parameters through techniques like gradient descent}; and normalizing outputs (activation functions also help in normalizing the output of each neuron, ensuring that it falls within a specific range. This normalization prevents the activation values from becoming too large or too small, which can lead to numerical instability or saturation of gradients during training). The choice of activation function can significantly impact the performance and training dynamics of a neural network classification model, making it an important consideration during model development. Different activation functions have different properties, and selecting the appropriate one depends on factors such as the nature of the problem, the characteristics of the data, and the desired behavior of the network.
 
 
 ## 1.1. Data Background <a class="anchor" id="1.1"></a>
@@ -5266,7 +5268,7 @@ display(cancer_rate_preprocessed_categorical_summary.sort_values(by=['ChiSquare.
 </div>
 
 
-## 1.6. Neural Network Classification Weight Update <a class="anchor" id="1.6"></a>
+## 1.6. Neural Network Classification Gradient and Weight Updates <a class="anchor" id="1.6"></a>
 
 ### 1.6.1 Premodelling Data Description <a class="anchor" id="1.6.1"></a>
 1. Among the predictor variables determined to have a statistically significant difference between the means of the numeric measurements obtained from LOW and HIGH groups of the <span style="color: #FF0000">CANRAT</span> target variable, only 2 were retained with the highest absolute t-test statistic values with reported low p-values less than the significance level of 0.05.. 
@@ -5457,6 +5459,10 @@ x_mat_full = matrix_x_complete
 
 [Backpropagation](https://link.springer.com/book/10.1007/978-0-387-84858-7) and [Weight Update](https://link.springer.com/book/10.1007/978-0-387-84858-7), in the context of an artificial neural network, involve the process of iteratively adjusting the weights of the connections between neurons in the network to minimize the difference between the predicted and the actual target responses. Input data is fed into the neural network, and it propagates through the network layer by layer, starting from the input layer, through hidden layers, and ending at the output layer. At each neuron, the weighted sum of inputs is calculated, followed by the application of an activation function to produce the neuron's output. Once the forward pass is complete, the network's output is compared to the actual target output. The difference between the predicted output and the actual output is quantified using a loss function, which measures the discrepancy between the predicted and actual values. Common loss functions for classification tasks include cross-entropy loss. During the backward pass, the error is propagated backward through the network to compute the gradients of the loss function with respect to each weight in the network. This is achieved using the chain rule of calculus, which allows the error to be decomposed and distributed backward through the network. The gradients quantify how much a change in each weight would affect the overall error of the network. Once the gradients are computed, the weights are updated in the opposite direction of the gradient to minimize the error. This update is typically performed using an optimization algorithm such as gradient descent, which adjusts the weights in proportion to their gradients and a learning rate hyperparameter. The learning rate determines the size of the step taken in the direction opposite to the gradient. These steps are repeated for multiple iterations (epochs) over the training data. As the training progresses, the weights are adjusted iteratively to minimize the error, leading to a neural network model that accurately classifies input data.
 
+[Activation Functions](https://link.springer.com/book/10.1007/978-0-387-84858-7) play a crucial role in neural networks by introducing non-linearity into the network, enabling the model to learn complex patterns and relationships within the data. In the context of a neural network classification model, activation functions are applied to the output of each neuron in the hidden layers to introduce non-linear mappings between the input and output, allowing the network to approximate complex functions and make non-linear decisions. Activation functions are significant during model development by introducing non-linearity (without activation functions, the neural network would simply be a series of linear transformations, no matter how many layers it has. Activation functions introduce non-linearities to the model, enabling it to learn and represent complex patterns and relationships in the data); propagating back gradients (activation functions help in the backpropagation algorithm by providing gradients that indicate the direction and magnitude of adjustments to the weights during training. These gradients are necessary for optimizing the network's parameters through techniques like gradient descent}; and normalizing outputs (activation functions also help in normalizing the output of each neuron, ensuring that it falls within a specific range. This normalization prevents the activation values from becoming too large or too small, which can lead to numerical instability or saturation of gradients during training). The choice of activation function can significantly impact the performance and training dynamics of a neural network classification model, making it an important consideration during model development. Different activation functions have different properties, and selecting the appropriate one depends on factors such as the nature of the problem, the characteristics of the data, and the desired behavior of the network.
+
+[Sigmoid Activation Function](https://link.springer.com/book/10.1007/978-0-387-84858-7) transforms a variable by determining the quotient between one and the sum of one and the Euler's constant raised to the given value of the variable. The resulting output resembles a smooth S-shaped curve which ranges from zero to one. Since, it squashes the input values between zero and one, it is useful for binary classification. The curve profile is not zero-centered which can lead to vanishing gradients problem during backpropagation. It is also prone to saturation, causing gradients to vanish when the input is too large or too small.
+
 1. A neural network with the following structure was formulated:
     * <span style="color: #FF0000">Hidden Layer</span> = 3
     * <span style="color: #FF0000">Number of Nodes per Hidden Layer</span> = 4
@@ -5464,10 +5470,10 @@ x_mat_full = matrix_x_complete
     * <span style="color: #FF0000">Learning Rate</span> = 0.1
     * <span style="color: #FF0000">Epochs</span> = 1000
     * <span style="color: #FF0000">Activation Function</span> = Sigmoid Activation Function
-3. The final squared loss estimate determined as 0.xxxxx at the 1000th epoch was not optimally low as compared to those obtained using the other parameter settings.
+3. The final loss estimate determined as 0.27805 at the 1000th epoch was not optimally low as compared to those obtained using the other parameter settings.
 4. Applying the backpropagation and gradient descent algorithms with a Sigmoid activation function, the neural network model performance is estimated as follows:
-    * <span style="color: #FF0000">Accuracy</span> = xx.xxxx
-5. The estimated classification accuracy using the backpropagation and gradient descent algorithms with a Sigmoid activation function was optimal as compared to those obtained using the other parameter settings, also demonstrating a consistently smooth profile during the epoch training
+    * <span style="color: #FF0000">Accuracy</span> = 74.84662
+5. The estimated classification accuracy using the backpropagation and gradient descent algorithms with a Sigmoid activation function was not optimal as compared to those obtained using the other parameter settings, also demonstrating a consistently smooth profile during the epoch training
 
 
 ```python
@@ -5617,7 +5623,7 @@ nn_sigmoid = NeuralNetwork_Sigmoid(input_size, hidden_size1, hidden_size2, hidde
 # Training a neural network model
 # with sigmoid activation function
 ##################################
-nn_sigmoid.train(X, y_one_hot, epochs=1000, lr=0.01)
+nn_sigmoid.train(X, y_one_hot, epochs=1001, lr=0.01)
 ```
 
     Epoch 0: Loss 0.316009360251368, Accuracy 0.7484662576687117
@@ -5630,6 +5636,7 @@ nn_sigmoid.train(X, y_one_hot, epochs=1000, lr=0.01)
     Epoch 700: Loss 0.28077152406724765, Accuracy 0.7484662576687117
     Epoch 800: Loss 0.27986564301503736, Accuracy 0.7484662576687117
     Epoch 900: Loss 0.2789612062764938, Accuracy 0.7484662576687117
+    Epoch 1000: Loss 0.27805328141665736, Accuracy 0.7484662576687117
     
 
 
@@ -5705,7 +5712,11 @@ plt.show()
 
 ### 1.6.3 Rectified Linear Unit Activation Function <a class="anchor" id="1.6.3"></a>
 
-[Backpropagation](https://link.springer.com/book/10.1007/978-0-387-84858-7) and [Weight Update](https://link.springer.com/book/10.1007/978-0-387-84858-7), in the context of an artificial neural network, involve the process of iteratively adjusting the weights of the connections between neurons in the network to minimize the difference between the predicted and the actual target responses. Input data is fed into the neural network, and it propagates through the network layer by layer, starting from the input layer, through hidden layers, and ending at the output layer. At each neuron, the weighted sum of inputs is calculated, followed by the application of an activation function to produce the neuron's output. Once the forward pass is complete, the network's output is compared to the actual target output. The difference between the predicted output and the actual output is quantified using a loss function, which measures the discrepancy between the predicted and actual values. Common loss functions for classification tasks include cross-entropy loss. During the backward pass, the error is propagated backward through the network to compute the gradients of the loss function with respect to each weight in the network. This is achieved using the chain rule of calculus, which allows the error to be decomposed and distributed backward through the network. The gradients quantify how much a change in each weight would affect the overall error of the network. Once the gradients are computed, the weights are updated in the opposite direction of the gradient to minimize the error. This update is typically performed using an optimization algorithm such as gradient descent, which adjusts the weights in proportion to their gradients and a learning rate hyperparameter. The learning rate determines the size of the step taken in the direction opposite to the gradient. These steps are repeated for multiple iterations (epochs) over the training data. As the training progresses, the weights are adjusted iteratively to minimize the error, leading to a neural network model that accurately classifies input data.
+[Backpropagation](https://link.springer.com/book/10.1007/978-0-387-84858-7) and [Weight Update](https://link.springer.com/book/10.1007/978-0-387-84858-7), in the context of an artificial neural network, involve the process of iteratively adjusting the weights of the connections between neurons in the network to minimize the difference between the predicted and the actual target responses. Input data is fed into the neural network, and it propagates through the network layer by layer, starting from the input layer, through hidden layers, and ending at the output layer. At each neuron, the weighted sum of inputs is calculated, followed by the application of an activation function to produce the neuron's output. Once the forward pass is complete, the network's output is compared to the actual target output. The difference between the predicted output and the actual output is quantified using a loss function, which measures the discrepancy between the predicted and actual values. Common loss functions for classification tasks include cross-entropy loss. During the backward pass, the error is propagated backward through the network to compute the gradients of the loss function with respect to each weight in the network. This is achieved using the chain rule of calculus, which allows the error to be decomposed and distributed backward through the network. The gradients quantify how much a change in each weight would affect the overall error of the network. Once the gradients are computed, the weights are updated in the opposite direction of the gradient to minimize the error. This update is typically performed using an optimization algorithm such as gradient descent, which adjusts the weights in proportion to their gradients and a learning rate hyperparameter. The learning rate determines the size of the step taken in the direction opposite to the gradient. These steps are repeated for multiple iterations (epochs) over the training data. As the training progresses, the weights are adjusted iteratively to minimize the error, leading to a neural network model that accurately classifies input data. This activation function is commonly used in the output layer for binary classification problems.
+
+[Activation Functions](https://link.springer.com/book/10.1007/978-0-387-84858-7) play a crucial role in neural networks by introducing non-linearity into the network, enabling the model to learn complex patterns and relationships within the data. In the context of a neural network classification model, activation functions are applied to the output of each neuron in the hidden layers to introduce non-linear mappings between the input and output, allowing the network to approximate complex functions and make non-linear decisions. Activation functions are significant during model development by introducing non-linearity (without activation functions, the neural network would simply be a series of linear transformations, no matter how many layers it has. Activation functions introduce non-linearities to the model, enabling it to learn and represent complex patterns and relationships in the data); propagating back gradients (activation functions help in the backpropagation algorithm by providing gradients that indicate the direction and magnitude of adjustments to the weights during training. These gradients are necessary for optimizing the network's parameters through techniques like gradient descent}; and normalizing outputs (activation functions also help in normalizing the output of each neuron, ensuring that it falls within a specific range. This normalization prevents the activation values from becoming too large or too small, which can lead to numerical instability or saturation of gradients during training). The choice of activation function can significantly impact the performance and training dynamics of a neural network classification model, making it an important consideration during model development. Different activation functions have different properties, and selecting the appropriate one depends on factors such as the nature of the problem, the characteristics of the data, and the desired behavior of the network.
+
+[Rectified Linear Unit Activation Function](https://link.springer.com/book/10.1007/978-0-387-84858-7) transforms a variable by determining the maximum between zero and the given value of the variable. The resulting output which ranges from zero to positive infinity is a piecewise linear function that returns zero for negative inputs and the input value for positive inputs. It is a simple and computationally efficient method which solves the vanishing gradients problem and accelerates convergence by avoiding saturation to positive values. However, it can suffer from dying RELU problem where neurons become inactive (outputs zero) for all inputs during training if large gradients consistently flow through them.  The curve profile is not zero-centered which can lead to vanishing gradients problem during backpropagation. It is also prone to saturation, causing gradients to vanish when the input is too large or too small. This activation function is widely used in hidden layers of deep neural networks.
 
 1. A neural network with the following structure was formulated:
     * <span style="color: #FF0000">Hidden Layer</span> = 3
@@ -5714,9 +5725,9 @@ plt.show()
     * <span style="color: #FF0000">Learning Rate</span> = 0.1
     * <span style="color: #FF0000">Epochs</span> = 1000
     * <span style="color: #FF0000">Activation Function</span> = Rectified Linear Unit Activation Function (RELU)
-3. The final squared loss estimate determined as 0.xxxxx at the 1000th epoch was not optimally low as compared to those obtained using the other parameter settings.
+3. The final loss estimate determined as 0.09623 at the 1000th epoch was not optimally low as compared to those obtained using the other parameter settings.
 4. Applying the backpropagation and gradient descent algorithms with a RELU activation function, the neural network model performance is estimated as follows:
-    * <span style="color: #FF0000">Accuracy</span> = xx.xxxx
+    * <span style="color: #FF0000">Accuracy</span> = 93.25153
 5. The estimated classification accuracy using the backpropagation and gradient descent algorithms with a RELU activation function was optimal as compared to those obtained using the other parameter settings, also demonstrating a consistently smooth profile during the epoch training
 
 
@@ -5868,7 +5879,7 @@ nn_relu = NeuralNetwork_RELU(input_size, hidden_size1, hidden_size2, hidden_size
 # Training a neural network model
 # with RELU activation function
 ##################################
-nn_relu.train(X, y_one_hot, epochs=1000, lr=0.01)
+nn_relu.train(X, y_one_hot, epochs=1001, lr=0.01)
 ```
 
     Epoch 0: Loss 0.3700211712894535, Accuracy 0.2822085889570552
@@ -5881,6 +5892,7 @@ nn_relu.train(X, y_one_hot, epochs=1000, lr=0.01)
     Epoch 700: Loss 0.09987241742776296, Accuracy 0.9263803680981595
     Epoch 800: Loss 0.09805768178547355, Accuracy 0.9325153374233128
     Epoch 900: Loss 0.09697282986650115, Accuracy 0.9325153374233128
+    Epoch 1000: Loss 0.0962368489065675, Accuracy 0.9325153374233128
     
 
 
@@ -5958,6 +5970,10 @@ plt.show()
 
 [Backpropagation](https://link.springer.com/book/10.1007/978-0-387-84858-7) and [Weight Update](https://link.springer.com/book/10.1007/978-0-387-84858-7), in the context of an artificial neural network, involve the process of iteratively adjusting the weights of the connections between neurons in the network to minimize the difference between the predicted and the actual target responses. Input data is fed into the neural network, and it propagates through the network layer by layer, starting from the input layer, through hidden layers, and ending at the output layer. At each neuron, the weighted sum of inputs is calculated, followed by the application of an activation function to produce the neuron's output. Once the forward pass is complete, the network's output is compared to the actual target output. The difference between the predicted output and the actual output is quantified using a loss function, which measures the discrepancy between the predicted and actual values. Common loss functions for classification tasks include cross-entropy loss. During the backward pass, the error is propagated backward through the network to compute the gradients of the loss function with respect to each weight in the network. This is achieved using the chain rule of calculus, which allows the error to be decomposed and distributed backward through the network. The gradients quantify how much a change in each weight would affect the overall error of the network. Once the gradients are computed, the weights are updated in the opposite direction of the gradient to minimize the error. This update is typically performed using an optimization algorithm such as gradient descent, which adjusts the weights in proportion to their gradients and a learning rate hyperparameter. The learning rate determines the size of the step taken in the direction opposite to the gradient. These steps are repeated for multiple iterations (epochs) over the training data. As the training progresses, the weights are adjusted iteratively to minimize the error, leading to a neural network model that accurately classifies input data.
 
+[Activation Functions](https://link.springer.com/book/10.1007/978-0-387-84858-7) play a crucial role in neural networks by introducing non-linearity into the network, enabling the model to learn complex patterns and relationships within the data. In the context of a neural network classification model, activation functions are applied to the output of each neuron in the hidden layers to introduce non-linear mappings between the input and output, allowing the network to approximate complex functions and make non-linear decisions. Activation functions are significant during model development by introducing non-linearity (without activation functions, the neural network would simply be a series of linear transformations, no matter how many layers it has. Activation functions introduce non-linearities to the model, enabling it to learn and represent complex patterns and relationships in the data); propagating back gradients (activation functions help in the backpropagation algorithm by providing gradients that indicate the direction and magnitude of adjustments to the weights during training. These gradients are necessary for optimizing the network's parameters through techniques like gradient descent}; and normalizing outputs (activation functions also help in normalizing the output of each neuron, ensuring that it falls within a specific range. This normalization prevents the activation values from becoming too large or too small, which can lead to numerical instability or saturation of gradients during training). The choice of activation function can significantly impact the performance and training dynamics of a neural network classification model, making it an important consideration during model development. Different activation functions have different properties, and selecting the appropriate one depends on factors such as the nature of the problem, the characteristics of the data, and the desired behavior of the network.
+
+[Leaky Rectified Linear Unit Activation Function](https://link.springer.com/book/10.1007/978-0-387-84858-7) transforms a variable by using the given value of the variable when it is greater than zero, but multiplies this value with a specific alpha otherwise. The resulting output which ranges from negative infinity to positive infinity is a piecewise linear function that returns the input value for positive inputs but allows a small non-zero value when the input is negative, preventing the dying RELU problem. It introduces a small slope for negative inputs, keeping the gradient flowing during backpropagation. This activation function provides a good alternative to RELU especially in networks where dying RELU is a concern.
+
 1. A neural network with the following structure was formulated:
     * <span style="color: #FF0000">Hidden Layer</span> = 3
     * <span style="color: #FF0000">Number of Nodes per Hidden Layer</span> = 4
@@ -5965,9 +5981,9 @@ plt.show()
     * <span style="color: #FF0000">Learning Rate</span> = 0.1
     * <span style="color: #FF0000">Epochs</span> = 1000
     * <span style="color: #FF0000">Activation Function</span> = Leaky Rectified Linear Unit Activation Function (Leaky RELU)
-3. The final squared loss estimate determined as 0.xxxxx at the 1000th epoch was not optimally low as compared to those obtained using the other parameter settings.
+3. The final loss estimate determined as 0.09377 at the 1000th epoch was not optimally low as compared to those obtained using the other parameter settings.
 4. Applying the backpropagation and gradient descent algorithms with a Leaky RELU activation function, the neural network model performance is estimated as follows:
-    * <span style="color: #FF0000">Accuracy</span> = xx.xxxx
+    * <span style="color: #FF0000">Accuracy</span> = 92.63803
 5. The estimated classification accuracy using the backpropagation and gradient descent algorithms with a Leaky RELU activation function was optimal as compared to those obtained using the other parameter settings, also demonstrating a consistently smooth profile during the epoch training.
 
 
@@ -5995,7 +6011,7 @@ class NeuralNetwork_LeakyRELU:
         self.losses = []
         self.accuracies = []
         
-    def leaky_relu(self, x, alpha=0.01):
+    def leaky_relu(self, x, alpha=0.10):
         return np.where(x > 0, x, alpha * x)
     
     def softmax(self, x):
@@ -6116,19 +6132,20 @@ nn_leakyrelu = NeuralNetwork_LeakyRELU(input_size, hidden_size1, hidden_size2, h
 # Training a neural network model
 # with Leaky RELU activation function
 ##################################
-nn_leakyrelu.train(X, y_one_hot, epochs=1000, lr=0.01)
+nn_leakyrelu.train(X, y_one_hot, epochs=1001, lr=0.01)
 ```
 
-    Epoch 0: Loss 0.3847212964012993, Accuracy 0.2883435582822086
-    Epoch 100: Loss 0.17809526047094637, Accuracy 0.901840490797546
-    Epoch 200: Loss 0.13089084904708354, Accuracy 0.9079754601226994
-    Epoch 300: Loss 0.11603864399086145, Accuracy 0.9141104294478528
-    Epoch 400: Loss 0.10898369629833157, Accuracy 0.9141104294478528
-    Epoch 500: Loss 0.10463433600701245, Accuracy 0.9202453987730062
-    Epoch 600: Loss 0.10135582285346631, Accuracy 0.9202453987730062
-    Epoch 700: Loss 0.09930395510126533, Accuracy 0.9202453987730062
-    Epoch 800: Loss 0.09788569124803327, Accuracy 0.9263803680981595
-    Epoch 900: Loss 0.09693492291763071, Accuracy 0.9325153374233128
+    Epoch 0: Loss 0.5521727210322692, Accuracy 0.3803680981595092
+    Epoch 100: Loss 0.15843767165873718, Accuracy 0.9079754601226994
+    Epoch 200: Loss 0.12183916598907374, Accuracy 0.901840490797546
+    Epoch 300: Loss 0.11001101254184706, Accuracy 0.9263803680981595
+    Epoch 400: Loss 0.1040206858711254, Accuracy 0.9263803680981595
+    Epoch 500: Loss 0.10064359626697071, Accuracy 0.9263803680981595
+    Epoch 600: Loss 0.09839877372876209, Accuracy 0.9325153374233128
+    Epoch 700: Loss 0.09675845212053225, Accuracy 0.9325153374233128
+    Epoch 800: Loss 0.09550172181604447, Accuracy 0.9263803680981595
+    Epoch 900: Loss 0.09454243365295599, Accuracy 0.9263803680981595
+    Epoch 1000: Loss 0.09377715998492316, Accuracy 0.9263803680981595
     
 
 
@@ -6202,9 +6219,13 @@ plt.show()
     
 
 
-### 1.6.5 Exponential Linear Unit <a class="anchor" id="1.6.5"></a>
+### 1.6.5 Exponential Linear Unit Activation Function <a class="anchor" id="1.6.5"></a>
 
 [Backpropagation](https://link.springer.com/book/10.1007/978-0-387-84858-7) and [Weight Update](https://link.springer.com/book/10.1007/978-0-387-84858-7), in the context of an artificial neural network, involve the process of iteratively adjusting the weights of the connections between neurons in the network to minimize the difference between the predicted and the actual target responses. Input data is fed into the neural network, and it propagates through the network layer by layer, starting from the input layer, through hidden layers, and ending at the output layer. At each neuron, the weighted sum of inputs is calculated, followed by the application of an activation function to produce the neuron's output. Once the forward pass is complete, the network's output is compared to the actual target output. The difference between the predicted output and the actual output is quantified using a loss function, which measures the discrepancy between the predicted and actual values. Common loss functions for classification tasks include cross-entropy loss. During the backward pass, the error is propagated backward through the network to compute the gradients of the loss function with respect to each weight in the network. This is achieved using the chain rule of calculus, which allows the error to be decomposed and distributed backward through the network. The gradients quantify how much a change in each weight would affect the overall error of the network. Once the gradients are computed, the weights are updated in the opposite direction of the gradient to minimize the error. This update is typically performed using an optimization algorithm such as gradient descent, which adjusts the weights in proportion to their gradients and a learning rate hyperparameter. The learning rate determines the size of the step taken in the direction opposite to the gradient. These steps are repeated for multiple iterations (epochs) over the training data. As the training progresses, the weights are adjusted iteratively to minimize the error, leading to a neural network model that accurately classifies input data.
+
+[Activation Functions](https://link.springer.com/book/10.1007/978-0-387-84858-7) play a crucial role in neural networks by introducing non-linearity into the network, enabling the model to learn complex patterns and relationships within the data. In the context of a neural network classification model, activation functions are applied to the output of each neuron in the hidden layers to introduce non-linear mappings between the input and output, allowing the network to approximate complex functions and make non-linear decisions. Activation functions are significant during model development by introducing non-linearity (without activation functions, the neural network would simply be a series of linear transformations, no matter how many layers it has. Activation functions introduce non-linearities to the model, enabling it to learn and represent complex patterns and relationships in the data); propagating back gradients (activation functions help in the backpropagation algorithm by providing gradients that indicate the direction and magnitude of adjustments to the weights during training. These gradients are necessary for optimizing the network's parameters through techniques like gradient descent}; and normalizing outputs (activation functions also help in normalizing the output of each neuron, ensuring that it falls within a specific range. This normalization prevents the activation values from becoming too large or too small, which can lead to numerical instability or saturation of gradients during training). The choice of activation function can significantly impact the performance and training dynamics of a neural network classification model, making it an important consideration during model development. Different activation functions have different properties, and selecting the appropriate one depends on factors such as the nature of the problem, the characteristics of the data, and the desired behavior of the network.
+
+[Exponential Linear Unit Activation Function](https://link.springer.com/book/10.1007/978-0-387-84858-7) transforms a variable by using the given value of the variable when it is greater than zero, but uses this value as power for the Euler's constant then subtracted by one prior to multiplying with a specific alpha otherwise. The resulting output which ranges from negative infinity to positive infinity is similar to a Leaky RELU profile but with an exponential function for negative inputs, allowing negative values to have negative outputs. Its profile is smooth and differentiable helping speed up convergence which can lead to faster learning. This activation function can be a good choice when smoother and faster convergence are desired.
 
 1. A neural network with the following structure was formulated:
     * <span style="color: #FF0000">Hidden Layer</span> = 3
@@ -6213,9 +6234,9 @@ plt.show()
     * <span style="color: #FF0000">Learning Rate</span> = 0.1
     * <span style="color: #FF0000">Epochs</span> = 1000
     * <span style="color: #FF0000">Activation Function</span> = Exponential Linear Unit (ELU)
-3. The final squared loss estimate determined as 0.xxxxx at the 1000th epoch was not optimally low as compared to those obtained using the other parameter settings.
+3. The final loss estimate determined as 0.09443 at the 1000th epoch was not optimally low as compared to those obtained using the other parameter settings.
 4. Applying the backpropagation and gradient descent algorithms with a ELU activation function, the neural network model performance is estimated as follows:
-    * <span style="color: #FF0000">Accuracy</span> = xx.xxxx
+    * <span style="color: #FF0000">Accuracy</span> = 92.63803
 5. The estimated classification accuracy using the backpropagation and gradient descent algorithms with a ELU activation function was optimal as compared to those obtained using the other parameter settings, also demonstrating a consistently smooth profile during the epoch training.
 
 
@@ -6364,7 +6385,7 @@ nn_elu = NeuralNetwork_ELU(input_size, hidden_size1, hidden_size2, hidden_size3,
 # Training a neural network model
 # with ELU activation function
 ##################################
-nn_elu.train(X, y_one_hot, epochs=1000, lr=0.01)
+nn_elu.train(X, y_one_hot, epochs=1001, lr=0.01)
 ```
 
     Epoch 0: Loss 0.6239532743548977, Accuracy 0.6748466257668712
@@ -6377,6 +6398,7 @@ nn_elu.train(X, y_one_hot, epochs=1000, lr=0.01)
     Epoch 700: Loss 0.0977143414467875, Accuracy 0.9263803680981595
     Epoch 800: Loss 0.09611887321358306, Accuracy 0.9263803680981595
     Epoch 900: Loss 0.0950962862639301, Accuracy 0.9263803680981595
+    Epoch 1000: Loss 0.09443192186232496, Accuracy 0.9263803680981595
     
 
 
@@ -6450,9 +6472,13 @@ plt.show()
     
 
 
-### 1.6.6 Scaled Exponential Linear Unit <a class="anchor" id="1.6.6"></a>
+### 1.6.6 Scaled Exponential Linear Unit Activation Function <a class="anchor" id="1.6.6"></a>
 
 [Backpropagation](https://link.springer.com/book/10.1007/978-0-387-84858-7) and [Weight Update](https://link.springer.com/book/10.1007/978-0-387-84858-7), in the context of an artificial neural network, involve the process of iteratively adjusting the weights of the connections between neurons in the network to minimize the difference between the predicted and the actual target responses. Input data is fed into the neural network, and it propagates through the network layer by layer, starting from the input layer, through hidden layers, and ending at the output layer. At each neuron, the weighted sum of inputs is calculated, followed by the application of an activation function to produce the neuron's output. Once the forward pass is complete, the network's output is compared to the actual target output. The difference between the predicted output and the actual output is quantified using a loss function, which measures the discrepancy between the predicted and actual values. Common loss functions for classification tasks include cross-entropy loss. During the backward pass, the error is propagated backward through the network to compute the gradients of the loss function with respect to each weight in the network. This is achieved using the chain rule of calculus, which allows the error to be decomposed and distributed backward through the network. The gradients quantify how much a change in each weight would affect the overall error of the network. Once the gradients are computed, the weights are updated in the opposite direction of the gradient to minimize the error. This update is typically performed using an optimization algorithm such as gradient descent, which adjusts the weights in proportion to their gradients and a learning rate hyperparameter. The learning rate determines the size of the step taken in the direction opposite to the gradient. These steps are repeated for multiple iterations (epochs) over the training data. As the training progresses, the weights are adjusted iteratively to minimize the error, leading to a neural network model that accurately classifies input data.
+
+[Activation Functions](https://link.springer.com/book/10.1007/978-0-387-84858-7) play a crucial role in neural networks by introducing non-linearity into the network, enabling the model to learn complex patterns and relationships within the data. In the context of a neural network classification model, activation functions are applied to the output of each neuron in the hidden layers to introduce non-linear mappings between the input and output, allowing the network to approximate complex functions and make non-linear decisions. Activation functions are significant during model development by introducing non-linearity (without activation functions, the neural network would simply be a series of linear transformations, no matter how many layers it has. Activation functions introduce non-linearities to the model, enabling it to learn and represent complex patterns and relationships in the data); propagating back gradients (activation functions help in the backpropagation algorithm by providing gradients that indicate the direction and magnitude of adjustments to the weights during training. These gradients are necessary for optimizing the network's parameters through techniques like gradient descent}; and normalizing outputs (activation functions also help in normalizing the output of each neuron, ensuring that it falls within a specific range. This normalization prevents the activation values from becoming too large or too small, which can lead to numerical instability or saturation of gradients during training). The choice of activation function can significantly impact the performance and training dynamics of a neural network classification model, making it an important consideration during model development. Different activation functions have different properties, and selecting the appropriate one depends on factors such as the nature of the problem, the characteristics of the data, and the desired behavior of the network.
+
+[Scaled Exponential Linear Unit Activation Function](https://link.springer.com/book/10.1007/978-0-387-84858-7) transforms a variable by using the given value of the variable when it is greater than zero, but uses this value as power for the Euler's constant then subtracted by one prior to multiplying with a specific alpha otherwise - but multiplying either value with a separately defined scaling factor. The resulting output which ranges from negative infinity to positive infinity is similar to an ELU profile but was designed to maintain a stable mean and variance of activations across layers, promoting self-normalization. This method provides a solution to vanishing and exploding gradient problems in deep networks. This activation function is typically used in deep neural networks where normalizing the activations is crucial for stability.
 
 1. A neural network with the following structure was formulated:
     * <span style="color: #FF0000">Hidden Layer</span> = 3
@@ -6461,9 +6487,9 @@ plt.show()
     * <span style="color: #FF0000">Learning Rate</span> = 0.1
     * <span style="color: #FF0000">Epochs</span> = 1000
     * <span style="color: #FF0000">Activation Function</span> = Scaled Exponential Linear Unit (SELU)
-3. The final squared loss estimate determined as 0.xxxxx at the 1000th epoch was not optimally low as compared to those obtained using the other parameter settings.
+3. The final loss estimate determined as 0.09674 at the 1000th epoch was not optimally low as compared to those obtained using the other parameter settings.
 4. Applying the backpropagation and gradient descent algorithms with a SELU activation function, the neural network model performance is estimated as follows:
-    * <span style="color: #FF0000">Accuracy</span> = xx.xxxx
+    * <span style="color: #FF0000">Accuracy</span> = 90.18404
 5. The estimated classification accuracy using the backpropagation and gradient descent algorithms with a SELU activation function was optimal as compared to those obtained using the other parameter settings, also demonstrating a consistently smooth profile during the epoch training.
 
 
@@ -6613,7 +6639,7 @@ nn_selu = NeuralNetwork_SELU(input_size, hidden_size1, hidden_size2, hidden_size
 # Training a neural network model
 # with SELU activation function
 ##################################
-nn_selu.train(X, y_one_hot, epochs=1000, lr=0.01)
+nn_selu.train(X, y_one_hot, epochs=1001, lr=0.01)
 ```
 
     Epoch 0: Loss 1.0981323160350684, Accuracy 0.3006134969325153
@@ -6626,6 +6652,7 @@ nn_selu.train(X, y_one_hot, epochs=1000, lr=0.01)
     Epoch 700: Loss 0.10280038529399513, Accuracy 0.901840490797546
     Epoch 800: Loss 0.10017443966015953, Accuracy 0.901840490797546
     Epoch 900: Loss 0.09822970379617403, Accuracy 0.8957055214723927
+    Epoch 1000: Loss 0.09674886443517218, Accuracy 0.901840490797546
     
 
 
@@ -6699,9 +6726,13 @@ plt.show()
     
 
 
-### 1.6.7 Randomized Leaky Rectified Linear Unit <a class="anchor" id="1.6.7"></a>
+### 1.6.7 Randomized Leaky Rectified Linear Unit Activation Function <a class="anchor" id="1.6.7"></a>
 
 [Backpropagation](https://link.springer.com/book/10.1007/978-0-387-84858-7) and [Weight Update](https://link.springer.com/book/10.1007/978-0-387-84858-7), in the context of an artificial neural network, involve the process of iteratively adjusting the weights of the connections between neurons in the network to minimize the difference between the predicted and the actual target responses. Input data is fed into the neural network, and it propagates through the network layer by layer, starting from the input layer, through hidden layers, and ending at the output layer. At each neuron, the weighted sum of inputs is calculated, followed by the application of an activation function to produce the neuron's output. Once the forward pass is complete, the network's output is compared to the actual target output. The difference between the predicted output and the actual output is quantified using a loss function, which measures the discrepancy between the predicted and actual values. Common loss functions for classification tasks include cross-entropy loss. During the backward pass, the error is propagated backward through the network to compute the gradients of the loss function with respect to each weight in the network. This is achieved using the chain rule of calculus, which allows the error to be decomposed and distributed backward through the network. The gradients quantify how much a change in each weight would affect the overall error of the network. Once the gradients are computed, the weights are updated in the opposite direction of the gradient to minimize the error. This update is typically performed using an optimization algorithm such as gradient descent, which adjusts the weights in proportion to their gradients and a learning rate hyperparameter. The learning rate determines the size of the step taken in the direction opposite to the gradient. These steps are repeated for multiple iterations (epochs) over the training data. As the training progresses, the weights are adjusted iteratively to minimize the error, leading to a neural network model that accurately classifies input data.
+
+[Activation Functions](https://link.springer.com/book/10.1007/978-0-387-84858-7) play a crucial role in neural networks by introducing non-linearity into the network, enabling the model to learn complex patterns and relationships within the data. In the context of a neural network classification model, activation functions are applied to the output of each neuron in the hidden layers to introduce non-linear mappings between the input and output, allowing the network to approximate complex functions and make non-linear decisions. Activation functions are significant during model development by introducing non-linearity (without activation functions, the neural network would simply be a series of linear transformations, no matter how many layers it has. Activation functions introduce non-linearities to the model, enabling it to learn and represent complex patterns and relationships in the data); propagating back gradients (activation functions help in the backpropagation algorithm by providing gradients that indicate the direction and magnitude of adjustments to the weights during training. These gradients are necessary for optimizing the network's parameters through techniques like gradient descent}; and normalizing outputs (activation functions also help in normalizing the output of each neuron, ensuring that it falls within a specific range. This normalization prevents the activation values from becoming too large or too small, which can lead to numerical instability or saturation of gradients during training). The choice of activation function can significantly impact the performance and training dynamics of a neural network classification model, making it an important consideration during model development. Different activation functions have different properties, and selecting the appropriate one depends on factors such as the nature of the problem, the characteristics of the data, and the desired behavior of the network.
+
+[Randomized Leaky Rectified Linear Unit Activation Function](https://link.springer.com/book/10.1007/978-0-387-84858-7) transforms a variable by using the given value of the variable when it is greater than zero, but multiplies this value with a random number obtained from a uniform distribution. The resulting output which ranges from negative infinity to positive infinity is similar to a Leaky RELU profile but the slope parameter is randomly initialized and updated during training. This process introduces randomness into the activations, acting as a form of regularization and reducing overfitting. This provides a trade-off between the benefits of RELU and Leaky RELU along with the regularization effect of randomness. This activation function is typically useful when dealing with overfitting or training large neural networks where regularization is necessary.
 
 1. A neural network with the following structure was formulated:
     * <span style="color: #FF0000">Hidden Layer</span> = 3
@@ -6710,9 +6741,9 @@ plt.show()
     * <span style="color: #FF0000">Learning Rate</span> = 0.1
     * <span style="color: #FF0000">Epochs</span> = 1000
     * <span style="color: #FF0000">Activation Function</span> = Randomized Leaky Rectified Linear Unit (RReLU)
-3. The final squared loss estimate determined as 0.xxxxx at the 1000th epoch was not optimally low as compared to those obtained using the other parameter settings.
+3. The final loss estimate determined as 0.09765 at the 1000th epoch was not optimally low as compared to those obtained using the other parameter settings.
 4. Applying the backpropagation and gradient descent algorithms with a RReLU activation function, the neural network model performance is estimated as follows:
-    * <span style="color: #FF0000">Accuracy</span> = xx.xxxx
+    * <span style="color: #FF0000">Accuracy</span> = 92.63803
 5. The estimated classification accuracy using the backpropagation and gradient descent algorithms with a RReLU activation function was optimal as compared to those obtained using the other parameter settings, also demonstrating a consistently smooth profile during the epoch training.
 
 
@@ -6862,7 +6893,7 @@ nn_rrelu = NeuralNetwork_RRELU(input_size, hidden_size1, hidden_size2, hidden_si
 # Training a neural network model
 # with RRELU activation function
 ##################################
-nn_rrelu.train(X, y_one_hot, epochs=1000, lr=0.01)
+nn_rrelu.train(X, y_one_hot, epochs=1001, lr=0.01)
 ```
 
     Epoch 0: Loss 0.425362770010686, Accuracy 0.3496932515337423
@@ -6875,6 +6906,7 @@ nn_rrelu.train(X, y_one_hot, epochs=1000, lr=0.01)
     Epoch 700: Loss 0.09951830751495401, Accuracy 0.9202453987730062
     Epoch 800: Loss 0.09799491669757483, Accuracy 0.9325153374233128
     Epoch 900: Loss 0.09839336828285081, Accuracy 0.9263803680981595
+    Epoch 1000: Loss 0.09765980921693126, Accuracy 0.9263803680981595
     
 
 
