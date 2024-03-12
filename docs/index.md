@@ -26,9 +26,9 @@
         * [1.6.2 Sigmoid Activation Function](#1.6.2)
         * [1.6.3 Rectified Linear Unit Activation Function](#1.6.3)
         * [1.6.4 Leaky Rectified Linear Unit Activation Function](#1.6.4)
-        * [1.6.5 Exponential Linear Unit](#1.6.5)
-        * [1.6.6 Scaled Exponential Linear Unit](#1.6.6)
-        * [1.6.7 Randomized Leaky Rectified Linear Unit](#1.6.7)
+        * [1.6.5 Exponential Linear Unit Activation Function](#1.6.5)
+        * [1.6.6 Scaled Exponential Linear Unit Activation Function](#1.6.6)
+        * [1.6.7 Randomized Leaky Rectified Linear Unit Activation Function](#1.6.7)
     * [1.7 Consolidated Findings](#1.7)
 * [**2. Summary**](#Summary)   
 * [**3. References**](#References)
@@ -5710,6 +5710,65 @@ plt.show()
     
 
 
+
+```python
+##################################
+# Gathering the final values for 
+# accuracy and loss error
+##################################
+sigmoid_metrics = pd.DataFrame(["ACCURACY","LOSS"])
+sigmoid_values = pd.DataFrame([nn_sigmoid.accuracies[-1],nn_sigmoid.losses[-1]])
+sigmoid_method = pd.DataFrame(["Sigmoid"]*2)
+sigmoid_summary = pd.concat([sigmoid_metrics, 
+                             sigmoid_values,
+                             sigmoid_method], axis=1)
+sigmoid_summary.columns = ['Metric', 'Value', 'Method']
+sigmoid_summary.reset_index(inplace=True, drop=True)
+display(sigmoid_summary)
+```
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Metric</th>
+      <th>Value</th>
+      <th>Method</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ACCURACY</td>
+      <td>0.748466</td>
+      <td>Sigmoid</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>LOSS</td>
+      <td>0.278053</td>
+      <td>Sigmoid</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
 ### 1.6.3 Rectified Linear Unit Activation Function <a class="anchor" id="1.6.3"></a>
 
 [Backpropagation](https://link.springer.com/book/10.1007/978-0-387-84858-7) and [Weight Update](https://link.springer.com/book/10.1007/978-0-387-84858-7), in the context of an artificial neural network, involve the process of iteratively adjusting the weights of the connections between neurons in the network to minimize the difference between the predicted and the actual target responses. Input data is fed into the neural network, and it propagates through the network layer by layer, starting from the input layer, through hidden layers, and ending at the output layer. At each neuron, the weighted sum of inputs is calculated, followed by the application of an activation function to produce the neuron's output. Once the forward pass is complete, the network's output is compared to the actual target output. The difference between the predicted output and the actual output is quantified using a loss function, which measures the discrepancy between the predicted and actual values. Common loss functions for classification tasks include cross-entropy loss. During the backward pass, the error is propagated backward through the network to compute the gradients of the loss function with respect to each weight in the network. This is achieved using the chain rule of calculus, which allows the error to be decomposed and distributed backward through the network. The gradients quantify how much a change in each weight would affect the overall error of the network. Once the gradients are computed, the weights are updated in the opposite direction of the gradient to minimize the error. This update is typically performed using an optimization algorithm such as gradient descent, which adjusts the weights in proportion to their gradients and a learning rate hyperparameter. The learning rate determines the size of the step taken in the direction opposite to the gradient. These steps are repeated for multiple iterations (epochs) over the training data. As the training progresses, the weights are adjusted iteratively to minimize the error, leading to a neural network model that accurately classifies input data. This activation function is commonly used in the output layer for binary classification problems.
@@ -5916,7 +5975,7 @@ plt.show()
 
 
     
-![png](output_183_0.png)
+![png](output_184_0.png)
     
 
 
@@ -5939,7 +5998,7 @@ plt.show()
 
 
     
-![png](output_184_0.png)
+![png](output_185_0.png)
     
 
 
@@ -5962,8 +6021,68 @@ plt.show()
 
 
     
-![png](output_185_0.png)
+![png](output_186_0.png)
     
+
+
+
+```python
+##################################
+# Gathering the final values for 
+# accuracy and loss error
+# using a RELU activation function
+##################################
+relu_metrics = pd.DataFrame(["ACCURACY","LOSS"])
+relu_values = pd.DataFrame([nn_relu.accuracies[-1],nn_relu.losses[-1]])
+relu_method = pd.DataFrame(["RELU"]*2)
+relu_summary = pd.concat([relu_metrics, 
+                          relu_values,
+                          relu_method], axis=1)
+relu_summary.columns = ['Metric', 'Value', 'Method']
+relu_summary.reset_index(inplace=True, drop=True)
+display(relu_summary)
+```
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Metric</th>
+      <th>Value</th>
+      <th>Method</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ACCURACY</td>
+      <td>0.932515</td>
+      <td>RELU</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>LOSS</td>
+      <td>0.096237</td>
+      <td>RELU</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 
 ### 1.6.4 Leaky Rectified Linear Unit Activation Function <a class="anchor" id="1.6.4"></a>
@@ -6169,7 +6288,7 @@ plt.show()
 
 
     
-![png](output_192_0.png)
+![png](output_194_0.png)
     
 
 
@@ -6192,7 +6311,7 @@ plt.show()
 
 
     
-![png](output_193_0.png)
+![png](output_195_0.png)
     
 
 
@@ -6215,8 +6334,68 @@ plt.show()
 
 
     
-![png](output_194_0.png)
+![png](output_196_0.png)
     
+
+
+
+```python
+##################################
+# Gathering the final values for 
+# accuracy and loss error
+# using a Leaky RELU activation function
+##################################
+leakyrelu_metrics = pd.DataFrame(["ACCURACY","LOSS"])
+leakyrelu_values = pd.DataFrame([nn_leakyrelu.accuracies[-1],nn_leakyrelu.losses[-1]])
+leakyrelu_method = pd.DataFrame(["LEAKY_RELU"]*2)
+leakyrelu_summary = pd.concat([leakyrelu_metrics,
+                               leakyrelu_values,
+                               leakyrelu_method], axis=1)
+leakyrelu_summary.columns = ['Metric', 'Value', 'Method']
+leakyrelu_summary.reset_index(inplace=True, drop=True)
+display(leakyrelu_summary)
+```
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Metric</th>
+      <th>Value</th>
+      <th>Method</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ACCURACY</td>
+      <td>0.926380</td>
+      <td>LEAKY_RELU</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>LOSS</td>
+      <td>0.093777</td>
+      <td>LEAKY_RELU</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 
 ### 1.6.5 Exponential Linear Unit Activation Function <a class="anchor" id="1.6.5"></a>
@@ -6422,7 +6601,7 @@ plt.show()
 
 
     
-![png](output_201_0.png)
+![png](output_204_0.png)
     
 
 
@@ -6445,7 +6624,7 @@ plt.show()
 
 
     
-![png](output_202_0.png)
+![png](output_205_0.png)
     
 
 
@@ -6468,8 +6647,68 @@ plt.show()
 
 
     
-![png](output_203_0.png)
+![png](output_206_0.png)
     
+
+
+
+```python
+##################################
+# Gathering the final values for 
+# accuracy and loss error
+# using a ELU activation function
+##################################
+elu_metrics = pd.DataFrame(["ACCURACY","LOSS"])
+elu_values = pd.DataFrame([nn_elu.accuracies[-1],nn_elu.losses[-1]])
+elu_method = pd.DataFrame(["ELU"]*2)
+elu_summary = pd.concat([elu_metrics,
+                         elu_values,
+                         elu_method], axis=1)
+elu_summary.columns = ['Metric', 'Value', 'Method']
+elu_summary.reset_index(inplace=True, drop=True)
+display(elu_summary)
+```
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Metric</th>
+      <th>Value</th>
+      <th>Method</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ACCURACY</td>
+      <td>0.926380</td>
+      <td>ELU</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>LOSS</td>
+      <td>0.094432</td>
+      <td>ELU</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 
 ### 1.6.6 Scaled Exponential Linear Unit Activation Function <a class="anchor" id="1.6.6"></a>
@@ -6676,7 +6915,7 @@ plt.show()
 
 
     
-![png](output_210_0.png)
+![png](output_214_0.png)
     
 
 
@@ -6699,7 +6938,7 @@ plt.show()
 
 
     
-![png](output_211_0.png)
+![png](output_215_0.png)
     
 
 
@@ -6722,8 +6961,68 @@ plt.show()
 
 
     
-![png](output_212_0.png)
+![png](output_216_0.png)
     
+
+
+
+```python
+##################################
+# Gathering the final values for 
+# accuracy and loss error
+# using a SELU activation function
+##################################
+selu_metrics = pd.DataFrame(["ACCURACY","LOSS"])
+selu_values = pd.DataFrame([nn_selu.accuracies[-1],nn_selu.losses[-1]])
+selu_method = pd.DataFrame(["SELU"]*2)
+selu_summary = pd.concat([selu_metrics,
+                          selu_values,
+                          selu_method], axis=1)
+selu_summary.columns = ['Metric', 'Value', 'Method']
+selu_summary.reset_index(inplace=True, drop=True)
+display(selu_summary)
+```
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Metric</th>
+      <th>Value</th>
+      <th>Method</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ACCURACY</td>
+      <td>0.901840</td>
+      <td>SELU</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>LOSS</td>
+      <td>0.096749</td>
+      <td>SELU</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 
 ### 1.6.7 Randomized Leaky Rectified Linear Unit Activation Function <a class="anchor" id="1.6.7"></a>
@@ -6930,7 +7229,7 @@ plt.show()
 
 
     
-![png](output_219_0.png)
+![png](output_224_0.png)
     
 
 
@@ -6953,7 +7252,7 @@ plt.show()
 
 
     
-![png](output_220_0.png)
+![png](output_225_0.png)
     
 
 
@@ -6976,8 +7275,68 @@ plt.show()
 
 
     
-![png](output_221_0.png)
+![png](output_226_0.png)
     
+
+
+
+```python
+##################################
+# Gathering the final values for 
+# accuracy and loss error
+# using a RRELU activation function
+##################################
+rrelu_metrics = pd.DataFrame(["ACCURACY","LOSS"])
+rrelu_values = pd.DataFrame([nn_rrelu.accuracies[-1],nn_rrelu.losses[-1]])
+rrelu_method = pd.DataFrame(["RRELU"]*2)
+rrelu_summary = pd.concat([rrelu_metrics,
+                           rrelu_values,
+                           rrelu_method], axis=1)
+rrelu_summary.columns = ['Metric', 'Value', 'Method']
+rrelu_summary.reset_index(inplace=True, drop=True)
+display(rrelu_summary)
+```
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Metric</th>
+      <th>Value</th>
+      <th>Method</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ACCURACY</td>
+      <td>0.92638</td>
+      <td>RRELU</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>LOSS</td>
+      <td>0.09766</td>
+      <td>RRELU</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 
 ## 1.7. Consolidated Findings <a class="anchor" id="1.7"></a>
