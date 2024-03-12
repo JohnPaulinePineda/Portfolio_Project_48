@@ -7345,8 +7345,331 @@ display(rrelu_summary)
 
 
 ```python
-
+##################################
+# Consolidating all the
+# model performance metrics
+##################################
+model_performance_comparison = pd.concat([sigmoid_summary, 
+                                          relu_summary,
+                                          leakyrelu_summary, 
+                                          elu_summary,
+                                          selu_summary, 
+                                          rrelu_summary], 
+                                         ignore_index=True)
+print('Neural Network Model Comparison: ')
+display(model_performance_comparison)
 ```
+
+    Neural Network Model Comparison: 
+    
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Metric</th>
+      <th>Value</th>
+      <th>Method</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ACCURACY</td>
+      <td>0.748466</td>
+      <td>Sigmoid</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>LOSS</td>
+      <td>0.278053</td>
+      <td>Sigmoid</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>ACCURACY</td>
+      <td>0.932515</td>
+      <td>RELU</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>LOSS</td>
+      <td>0.096237</td>
+      <td>RELU</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>ACCURACY</td>
+      <td>0.926380</td>
+      <td>LEAKY_RELU</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>LOSS</td>
+      <td>0.093777</td>
+      <td>LEAKY_RELU</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>ACCURACY</td>
+      <td>0.926380</td>
+      <td>ELU</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>LOSS</td>
+      <td>0.094432</td>
+      <td>ELU</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>ACCURACY</td>
+      <td>0.901840</td>
+      <td>SELU</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>LOSS</td>
+      <td>0.096749</td>
+      <td>SELU</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>ACCURACY</td>
+      <td>0.926380</td>
+      <td>RRELU</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>LOSS</td>
+      <td>0.097660</td>
+      <td>RRELU</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+```python
+##################################
+# Consolidating the values for the
+# accuracy metrics
+# for all models
+##################################
+model_performance_comparison_accuracy = model_performance_comparison[model_performance_comparison['Metric']=='ACCURACY']
+model_performance_comparison_accuracy.reset_index(inplace=True, drop=True)
+model_performance_comparison_accuracy
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Metric</th>
+      <th>Value</th>
+      <th>Method</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ACCURACY</td>
+      <td>0.748466</td>
+      <td>Sigmoid</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>ACCURACY</td>
+      <td>0.932515</td>
+      <td>RELU</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>ACCURACY</td>
+      <td>0.926380</td>
+      <td>LEAKY_RELU</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>ACCURACY</td>
+      <td>0.926380</td>
+      <td>ELU</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>ACCURACY</td>
+      <td>0.901840</td>
+      <td>SELU</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>ACCURACY</td>
+      <td>0.926380</td>
+      <td>RRELU</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+##################################
+# Plotting the values for the
+# accuracy metrics
+# for all models
+##################################
+fig, ax = plt.subplots(figsize=(7, 7))
+accuracy_hbar = ax.barh(model_performance_comparison_accuracy['Method'], model_performance_comparison_accuracy['Value'])
+ax.set_xlabel("Accuracy")
+ax.set_ylabel("Neural Network Classification Models")
+ax.bar_label(accuracy_hbar, fmt='%.5f', padding=-50, color='white', fontweight='bold')
+ax.set_xlim(0,1)
+plt.show()
+```
+
+
+    
+![png](output_231_0.png)
+    
+
+
+
+```python
+##################################
+# Consolidating the values for the
+# logarithmic loss error metrics
+# for all models
+##################################
+model_performance_comparison_loss = model_performance_comparison[model_performance_comparison['Metric']=='LOSS']
+model_performance_comparison_loss.reset_index(inplace=True, drop=True)
+model_performance_comparison_loss
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Metric</th>
+      <th>Value</th>
+      <th>Method</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>LOSS</td>
+      <td>0.278053</td>
+      <td>Sigmoid</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>LOSS</td>
+      <td>0.096237</td>
+      <td>RELU</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>LOSS</td>
+      <td>0.093777</td>
+      <td>LEAKY_RELU</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>LOSS</td>
+      <td>0.094432</td>
+      <td>ELU</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>LOSS</td>
+      <td>0.096749</td>
+      <td>SELU</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>LOSS</td>
+      <td>0.097660</td>
+      <td>RRELU</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+##################################
+# Plotting the values for the
+# loss error
+# for all models
+##################################
+fig, ax = plt.subplots(figsize=(7, 7))
+loss_hbar = ax.barh(model_performance_comparison_loss['Method'], model_performance_comparison_loss['Value'])
+ax.set_xlabel("Loss Error")
+ax.set_ylabel("Neural Network Classification Models")
+ax.bar_label(loss_hbar, fmt='%.5f', padding=-50, color='white', fontweight='bold')
+ax.set_xlim(0,0.40)
+plt.show()
+```
+
+
+    
+![png](output_233_0.png)
+    
+
 
 # 2. Summary <a class="anchor" id="Summary"></a>
 
