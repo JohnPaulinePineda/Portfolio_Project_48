@@ -14655,7 +14655,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="1.-Table-of-Contents-">1. Table of Contents <a class="anchor" id="TOC" /><a class="anchor-link" href="#1.-Table-of-Contents-">&#182;</a></h1><p>This project manually implements the <strong>Sigmoid</strong>, <strong>Rectified Linear Unit</strong>, <strong>Leaky Rectified Linear Unit</strong>, <strong>Exponential Linear Unit</strong>, <strong>Scaled Exponential Linear Unit</strong> and <strong>Randomized Leaky Rectified Linear Unit</strong> activation functions using various helpful packages in <mark style="background-color: #CCECFF"><b>Python</b></mark> with fixed values applied for the learning rate and epoch count parameters to optimally update the gradients and weights an artificial neural network classification model. The gradient, weight, cost function and classification accuracy optimization profiles of the different activation settings were compared. All results were consolidated in a <a href="#Summary"><span style="color: #FF0000"><b>Summary</b></span></a> presented at the end of the document.</p>
+<h1 id="1.-Table-of-Contents-">1. Table of Contents <a class="anchor" id="TOC" /><a class="anchor-link" href="#1.-Table-of-Contents-">&#182;</a></h1><p>This project manually implements the <strong>Sigmoid</strong>, <strong>Rectified Linear Unit</strong>, <strong>Leaky Rectified Linear Unit</strong>, <strong>Exponential Linear Unit</strong>, <strong>Scaled Exponential Linear Unit</strong> and <strong>Randomized Leaky Rectified Linear Unit</strong> activation functions using various helpful packages in <mark style="background-color: #CCECFF"><b>Python</b></mark> with fixed values applied for the learning rate and iteration count parameters to optimally update the gradients and weights of an artificial neural network classification model. The gradient, weight, cost function and classification accuracy optimization profiles of the different activation settings were compared. All results were consolidated in a <a href="#Summary"><span style="color: #FF0000"><b>Summary</b></span></a> presented at the end of the document.</p>
 <p><a href="https://link.springer.com/book/10.1007/978-0-387-84858-7">Artificial Neural Network</a>, in the context of categorical response prediction, consists of interconnected nodes called neurons organized in layers. The model architecture involves an input layer which receives the input data, with each neuron representing a feature or attribute of the data; hidden layers which perform computations on the input data through weighted connections between neurons and apply activation functions to produce outputs; and the output layer which produces the final predictions equal to the number of classes, each representing the probability of the input belonging to a particular class, based on the computations performed in the hidden layers. Neurons within adjacent layers are connected by weighted connections. Each connection has an associated weight that determines the strength of influence one neuron has on another. These weights are adjusted during the training process to enable the network to learn from the input data and make accurate predictions. Activation functions introduce non-linearities into the network, allowing it to learn complex relationships between inputs and outputs. The training process involves presenting input data along with corresponding target outputs to the network and adjusting the weights to minimize the difference between the predicted outputs and the actual targets which is typically performed through optimization algorithms such as gradient descent and backpropagation. The training process iteratively updates the weights until the model's predictions closely match the target outputs.</p>
 <p><a href="https://link.springer.com/book/10.1007/978-0-387-84858-7">Backpropagation</a> and <a href="https://link.springer.com/book/10.1007/978-0-387-84858-7">Weight Update</a>, in the context of an artificial neural network, involve the process of iteratively adjusting the weights of the connections between neurons in the network to minimize the difference between the predicted and the actual target responses. Input data is fed into the neural network, and it propagates through the network layer by layer, starting from the input layer, through hidden layers, and ending at the output layer. At each neuron, the weighted sum of inputs is calculated, followed by the application of an activation function to produce the neuron's output. Once the forward pass is complete, the network's output is compared to the actual target output. The difference between the predicted output and the actual output is quantified using a loss function, which measures the discrepancy between the predicted and actual values. Common loss functions for classification tasks include cross-entropy loss. During the backward pass, the error is propagated backward through the network to compute the gradients of the loss function with respect to each weight in the network. This is achieved using the chain rule of calculus, which allows the error to be decomposed and distributed backward through the network. The gradients quantify how much a change in each weight would affect the overall error of the network. Once the gradients are computed, the weights are updated in the opposite direction of the gradient to minimize the error. This update is typically performed using an optimization algorithm such as gradient descent, which adjusts the weights in proportion to their gradients and a learning rate hyperparameter. The learning rate determines the size of the step taken in the direction opposite to the gradient. These steps are repeated for multiple iterations (epochs) over the training data. As the training progresses, the weights are adjusted iteratively to minimize the error, leading to a neural network model that accurately classifies input data.</p>
 <p><a href="https://link.springer.com/book/10.1007/978-0-387-84858-7">Activation Functions</a> play a crucial role in neural networks by introducing non-linearity into the network, enabling the model to learn complex patterns and relationships within the data. In the context of a neural network classification model, activation functions are applied to the output of each neuron in the hidden layers to introduce non-linear mappings between the input and output, allowing the network to approximate complex functions and make non-linear decisions. Activation functions are significant during model development by introducing non-linearity (without activation functions, the neural network would simply be a series of linear transformations, no matter how many layers it has. Activation functions introduce non-linearities to the model, enabling it to learn and represent complex patterns and relationships in the data); propagating back gradients (activation functions help in the backpropagation algorithm by providing gradients that indicate the direction and magnitude of adjustments to the weights during training. These gradients are necessary for optimizing the network's parameters through techniques like gradient descent}; and normalizing outputs (activation functions also help in normalizing the output of each neuron, ensuring that it falls within a specific range. This normalization prevents the activation values from becoming too large or too small, which can lead to numerical instability or saturation of gradients during training). The choice of activation function can significantly impact the performance and training dynamics of a neural network classification model, making it an important consideration during model development. Different activation functions have different properties, and selecting the appropriate one depends on factors such as the nature of the problem, the characteristics of the data, and the desired behavior of the network.</p>
@@ -23537,7 +23537,7 @@ class="
 </ul>
 </li>
 <li>The backpropagation and gradient descent algorithms were implemented with parameter settings described as follows:<ul>
-<li><span style="color: #FF0000">Learning Rate</span> = 0.1</li>
+<li><span style="color: #FF0000">Learning Rate</span> = 0.01</li>
 <li><span style="color: #FF0000">Epochs</span> = 1000</li>
 <li><span style="color: #FF0000">Activation Function</span> = Sigmoid Activation Function</li>
 </ul>
@@ -24069,7 +24069,7 @@ class="
 </ul>
 </li>
 <li>The backpropagation and gradient descent algorithms were implemented with parameter settings described as follows:<ul>
-<li><span style="color: #FF0000">Learning Rate</span> = 0.1</li>
+<li><span style="color: #FF0000">Learning Rate</span> = 0.01</li>
 <li><span style="color: #FF0000">Epochs</span> = 1000</li>
 <li><span style="color: #FF0000">Activation Function</span> = Rectified Linear Unit Activation Function (RELU)</li>
 </ul>
@@ -24602,7 +24602,7 @@ class="
 </ul>
 </li>
 <li>The backpropagation and gradient descent algorithms were implemented with parameter settings described as follows:<ul>
-<li><span style="color: #FF0000">Learning Rate</span> = 0.1</li>
+<li><span style="color: #FF0000">Learning Rate</span> = 0.01</li>
 <li><span style="color: #FF0000">Epochs</span> = 1000</li>
 <li><span style="color: #FF0000">Activation Function</span> = Leaky Rectified Linear Unit Activation Function (Leaky RELU)</li>
 </ul>
@@ -25133,7 +25133,7 @@ class="
 </ul>
 </li>
 <li>The backpropagation and gradient descent algorithms were implemented with parameter settings described as follows:<ul>
-<li><span style="color: #FF0000">Learning Rate</span> = 0.1</li>
+<li><span style="color: #FF0000">Learning Rate</span> = 0.01</li>
 <li><span style="color: #FF0000">Epochs</span> = 1000</li>
 <li><span style="color: #FF0000">Activation Function</span> = Exponential Linear Unit (ELU)</li>
 </ul>
@@ -25664,7 +25664,7 @@ class="
 </ul>
 </li>
 <li>The backpropagation and gradient descent algorithms were implemented with parameter settings described as follows:<ul>
-<li><span style="color: #FF0000">Learning Rate</span> = 0.1</li>
+<li><span style="color: #FF0000">Learning Rate</span> = 0.01</li>
 <li><span style="color: #FF0000">Epochs</span> = 1000</li>
 <li><span style="color: #FF0000">Activation Function</span> = Scaled Exponential Linear Unit (SELU)</li>
 </ul>
@@ -26196,7 +26196,7 @@ class="
 </ul>
 </li>
 <li>The backpropagation and gradient descent algorithms were implemented with parameter settings described as follows:<ul>
-<li><span style="color: #FF0000">Learning Rate</span> = 0.1</li>
+<li><span style="color: #FF0000">Learning Rate</span> = 0.01</li>
 <li><span style="color: #FF0000">Epochs</span> = 1000</li>
 <li><span style="color: #FF0000">Activation Function</span> = Randomized Leaky Rectified Linear Unit (RReLU)</li>
 </ul>

@@ -37,7 +37,7 @@
 
 # 1. Table of Contents <a class="anchor" id="TOC"></a>
 
-This project manually implements the **Sigmoid**, **Rectified Linear Unit**, **Leaky Rectified Linear Unit**, **Exponential Linear Unit**, **Scaled Exponential Linear Unit** and **Randomized Leaky Rectified Linear Unit** activation functions using various helpful packages in <mark style="background-color: #CCECFF"><b>Python</b></mark> with fixed values applied for the learning rate and epoch count parameters to optimally update the gradients and weights an artificial neural network classification model. The gradient, weight, cost function and classification accuracy optimization profiles of the different activation settings were compared. All results were consolidated in a [<span style="color: #FF0000"><b>Summary</b></span>](#Summary) presented at the end of the document.
+This project manually implements the **Sigmoid**, **Rectified Linear Unit**, **Leaky Rectified Linear Unit**, **Exponential Linear Unit**, **Scaled Exponential Linear Unit** and **Randomized Leaky Rectified Linear Unit** activation functions using various helpful packages in <mark style="background-color: #CCECFF"><b>Python</b></mark> with fixed values applied for the learning rate and iteration count parameters to optimally update the gradients and weights of an artificial neural network classification model. The gradient, weight, cost function and classification accuracy optimization profiles of the different activation settings were compared. All results were consolidated in a [<span style="color: #FF0000"><b>Summary</b></span>](#Summary) presented at the end of the document.
 
 [Artificial Neural Network](https://link.springer.com/book/10.1007/978-0-387-84858-7), in the context of categorical response prediction, consists of interconnected nodes called neurons organized in layers. The model architecture involves an input layer which receives the input data, with each neuron representing a feature or attribute of the data; hidden layers which perform computations on the input data through weighted connections between neurons and apply activation functions to produce outputs; and the output layer which produces the final predictions equal to the number of classes, each representing the probability of the input belonging to a particular class, based on the computations performed in the hidden layers. Neurons within adjacent layers are connected by weighted connections. Each connection has an associated weight that determines the strength of influence one neuron has on another. These weights are adjusted during the training process to enable the network to learn from the input data and make accurate predictions. Activation functions introduce non-linearities into the network, allowing it to learn complex relationships between inputs and outputs. The training process involves presenting input data along with corresponding target outputs to the network and adjusting the weights to minimize the difference between the predicted outputs and the actual targets which is typically performed through optimization algorithms such as gradient descent and backpropagation. The training process iteratively updates the weights until the model's predictions closely match the target outputs.
 
@@ -5463,7 +5463,7 @@ y_values = np.where(cancer_rate_premodelling['CANRAT'] == 'High', 1, 0)
     * <span style="color: #FF0000">Hidden Layer</span> = 3
     * <span style="color: #FF0000">Number of Nodes per Hidden Layer</span> = 4
 2. The backpropagation and gradient descent algorithms were implemented with parameter settings described as follows:
-    * <span style="color: #FF0000">Learning Rate</span> = 0.1
+    * <span style="color: #FF0000">Learning Rate</span> = 0.01
     * <span style="color: #FF0000">Epochs</span> = 1000
     * <span style="color: #FF0000">Activation Function</span> = Sigmoid Activation Function
 3. The final loss estimate determined as 0.27805 at the 1000th epoch was not optimally low as compared to those obtained using the other parameter settings.
@@ -5777,7 +5777,7 @@ display(sigmoid_summary)
     * <span style="color: #FF0000">Hidden Layer</span> = 3
     * <span style="color: #FF0000">Number of Nodes per Hidden Layer</span> = 4
 2. The backpropagation and gradient descent algorithms were implemented with parameter settings described as follows:
-    * <span style="color: #FF0000">Learning Rate</span> = 0.1
+    * <span style="color: #FF0000">Learning Rate</span> = 0.01
     * <span style="color: #FF0000">Epochs</span> = 1000
     * <span style="color: #FF0000">Activation Function</span> = Rectified Linear Unit Activation Function (RELU)
 3. The final loss estimate determined as 0.09623 at the 1000th epoch was not optimally low as compared to those obtained using the other parameter settings.
@@ -6093,7 +6093,7 @@ display(relu_summary)
     * <span style="color: #FF0000">Hidden Layer</span> = 3
     * <span style="color: #FF0000">Number of Nodes per Hidden Layer</span> = 4
 2. The backpropagation and gradient descent algorithms were implemented with parameter settings described as follows:
-    * <span style="color: #FF0000">Learning Rate</span> = 0.1
+    * <span style="color: #FF0000">Learning Rate</span> = 0.01
     * <span style="color: #FF0000">Epochs</span> = 1000
     * <span style="color: #FF0000">Activation Function</span> = Leaky Rectified Linear Unit Activation Function (Leaky RELU)
 3. The final loss estimate determined as 0.09377 at the 1000th epoch was not optimally low as compared to those obtained using the other parameter settings.
@@ -6406,7 +6406,7 @@ display(leakyrelu_summary)
     * <span style="color: #FF0000">Hidden Layer</span> = 3
     * <span style="color: #FF0000">Number of Nodes per Hidden Layer</span> = 4
 2. The backpropagation and gradient descent algorithms were implemented with parameter settings described as follows:
-    * <span style="color: #FF0000">Learning Rate</span> = 0.1
+    * <span style="color: #FF0000">Learning Rate</span> = 0.01
     * <span style="color: #FF0000">Epochs</span> = 1000
     * <span style="color: #FF0000">Activation Function</span> = Exponential Linear Unit (ELU)
 3. The final loss estimate determined as 0.09443 at the 1000th epoch was not optimally low as compared to those obtained using the other parameter settings.
@@ -6719,7 +6719,7 @@ display(elu_summary)
     * <span style="color: #FF0000">Hidden Layer</span> = 3
     * <span style="color: #FF0000">Number of Nodes per Hidden Layer</span> = 4
 2. The backpropagation and gradient descent algorithms were implemented with parameter settings described as follows:
-    * <span style="color: #FF0000">Learning Rate</span> = 0.1
+    * <span style="color: #FF0000">Learning Rate</span> = 0.01
     * <span style="color: #FF0000">Epochs</span> = 1000
     * <span style="color: #FF0000">Activation Function</span> = Scaled Exponential Linear Unit (SELU)
 3. The final loss estimate determined as 0.09674 at the 1000th epoch was not optimally low as compared to those obtained using the other parameter settings.
@@ -7033,7 +7033,7 @@ display(selu_summary)
     * <span style="color: #FF0000">Hidden Layer</span> = 3
     * <span style="color: #FF0000">Number of Nodes per Hidden Layer</span> = 4
 2. The backpropagation and gradient descent algorithms were implemented with parameter settings described as follows:
-    * <span style="color: #FF0000">Learning Rate</span> = 0.1
+    * <span style="color: #FF0000">Learning Rate</span> = 0.01
     * <span style="color: #FF0000">Epochs</span> = 1000
     * <span style="color: #FF0000">Activation Function</span> = Randomized Leaky Rectified Linear Unit (RReLU)
 3. The final loss estimate determined as 0.09765 at the 1000th epoch was not optimally low as compared to those obtained using the other parameter settings.
