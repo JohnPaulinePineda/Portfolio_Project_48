@@ -5438,6 +5438,21 @@ ax.legend(loc='upper left',title='CANRAT');
     
 
 
+
+```python
+##################################
+# Formulating the individual
+# neural network components
+##################################
+matrix_x_values = cancer_rate_premodelling.iloc[:,0:2].to_numpy()
+matrix_x_bias = np.ones((cancer_rate_premodelling.shape[0],1))
+matrix_x_complete = np.concatenate((matrix_x_values,matrix_x_bias), axis=1)
+y_values = np.where(cancer_rate_premodelling['CANRAT'] == 'High', 1, 0)
+observation_count = cancer_rate_premodelling.shape[0]
+num_obs = observation_count
+x_mat_full = matrix_x_complete
+```
+
 ### 1.6.2 Sigmoid Activation Function <a class="anchor" id="1.6.2"></a>
 
 [Backpropagation](https://link.springer.com/book/10.1007/978-0-387-84858-7) and [Weight Update](https://link.springer.com/book/10.1007/978-0-387-84858-7), in the context of an artificial neural network, involve the process of iteratively adjusting the weights of the connections between neurons in the network to minimize the difference between the predicted and the actual target responses. Input data is fed into the neural network, and it propagates through the network layer by layer, starting from the input layer, through hidden layers, and ending at the output layer. At each neuron, the weighted sum of inputs is calculated, followed by the application of an activation function to produce the neuron's output. Once the forward pass is complete, the network's output is compared to the actual target output. The difference between the predicted output and the actual output is quantified using a loss function, which measures the discrepancy between the predicted and actual values. Common loss functions for classification tasks include cross-entropy loss. During the backward pass, the error is propagated backward through the network to compute the gradients of the loss function with respect to each weight in the network. This is achieved using the chain rule of calculus, which allows the error to be decomposed and distributed backward through the network. The gradients quantify how much a change in each weight would affect the overall error of the network. Once the gradients are computed, the weights are updated in the opposite direction of the gradient to minimize the error. This update is typically performed using an optimization algorithm such as gradient descent, which adjusts the weights in proportion to their gradients and a learning rate hyperparameter. The learning rate determines the size of the step taken in the direction opposite to the gradient. These steps are repeated for multiple iterations (epochs) over the training data. As the training progresses, the weights are adjusted iteratively to minimize the error, leading to a neural network model that accurately classifies input data.
@@ -5456,8 +5471,237 @@ ax.legend(loc='upper left',title='CANRAT');
 
 
 ```python
-
+##################################
+# Creating a class object
+# for the neural network algorithm
+# using a sigmoid activation function
+##################################
+class NeuralNetwork_Sigmoid:
+    def __init__(self, input_size, hidden_size1, hidden_size2, hidden_size3, output_size):
+        self.weights1 = np.random.randn(input_size, hidden_size1)
+        self.bias1 = np.zeros((1, hidden_size1))
+        
+        self.weights2 = np.random.randn(hidden_size1, hidden_size2)
+        self.bias2 = np.zeros((1, hidden_size2))
+        
+        self.weights3 = np.random.randn(hidden_size2, hidden_size3)
+        self.bias3 = np.zeros((1, hidden_size3))
+        
+        self.weights4 = np.random.randn(hidden_size3, output_size)
+        self.bias4 = np.zeros((1, output_size))
+        
+        self.gradients = {'dw1': [], 'db1': [], 'dw2': [], 'db2': [], 'dw3': [], 'db3': [], 'dw4': [], 'db4': []}
+        self.losses = []
+        self.accuracies = []
+        
+    def sigmoid(self, x):
+        return 1 / (1 + np.exp(-x))
+    
+    def sigmoid_derivative(self, x):
+        return x * (1 - x)
+    
+    def softmax(self, x):
+        exps = np.exp(x - np.max(x, axis=1, keepdims=True))
+        return exps / np.sum(exps, axis=1, keepdims=True)
+    
+    def forward(self, x):
+        self.hidden1 = self.sigmoid(np.dot(x, self.weights1) + self.bias1)
+        self.hidden2 = self.sigmoid(np.dot(self.hidden1, self.weights2) + self.bias2)
+        self.hidden3 = self.sigmoid(np.dot(self.hidden2, self.weights3) + self.bias3)
+        self.output = self.softmax(np.dot(self.hidden3, self.weights4) + self.bias4)
+        
+        return self.output
+    
+    def backward(self, x, y, lr):
+        m = x.shape[0]
+        
+       # Computing the output layer gradients
+        output_error = self.output - y
+        output_delta = output_error / m
+        
+        # Computing the hidden layer 3 gradients
+        hidden3_error = np.dot(output_delta, self.weights4.T)
+        hidden3_delta = hidden3_error * self.sigmoid_derivative(self.hidden3)
+        
+        # Computing the hidden layer 2 gradients
+        hidden2_error = np.dot(hidden3_delta, self.weights3.T)
+        hidden2_delta = hidden2_error * self.sigmoid_derivative(self.hidden2)
+        
+        # Computing the hidden layer 1 gradients
+        hidden1_error = np.dot(hidden2_delta, self.weights2.T)
+        hidden1_delta = hidden1_error * self.sigmoid_derivative(self.hidden1)
+        
+        # Updating weights and biases based on computed gradients
+        self.weights4 -= lr * np.dot(self.hidden3.T, output_delta)
+        self.bias4 -= lr * np.sum(output_delta, axis=0, keepdims=True)
+        
+        self.weights3 -= lr * np.dot(self.hidden2.T, hidden3_delta)
+        self.bias3 -= lr * np.sum(hidden3_delta, axis=0, keepdims=True)
+        
+        self.weights2 -= lr * np.dot(self.hidden1.T, hidden2_delta)
+        self.bias2 -= lr * np.sum(hidden2_delta, axis=0, keepdims=True)
+        
+        self.weights1 -= lr * np.dot(x.T, hidden1_delta)
+        self.bias1 -= lr * np.sum(hidden1_delta, axis=0, keepdims=True)
+        
+        # Storing the updated gradients
+        self.gradients['dw1'].append(np.mean(np.abs(hidden1_delta)))
+        self.gradients['db1'].append(np.mean(np.abs(self.bias1)))
+        self.gradients['dw2'].append(np.mean(np.abs(hidden2_delta)))
+        self.gradients['db2'].append(np.mean(np.abs(self.bias2)))
+        self.gradients['dw3'].append(np.mean(np.abs(hidden3_delta)))
+        self.gradients['db3'].append(np.mean(np.abs(self.bias3)))
+        self.gradients['dw4'].append(np.mean(np.abs(output_delta)))
+        self.gradients['db4'].append(np.mean(np.abs(self.bias4)))
+                       
+    def train(self, x, y, epochs, lr):
+        for i in range(epochs):
+            output = self.forward(x)
+            self.backward(x, y, lr)
+            loss = -np.mean(y * np.log(output))
+            self.losses.append(loss)
+            accuracy = self.accuracy(x, np.argmax(y, axis=1))
+            self.accuracies.append(accuracy)
+            if i % 100 == 0:
+                print(f'Epoch {i}: Loss {loss}, Accuracy {accuracy}')
+                
+    def predict(self, x):
+        return np.argmax(self.forward(x), axis=1)
+    
+    def accuracy(self, x, y):
+        pred = self.predict(x)
+        return np.mean(pred == y)
 ```
+
+
+```python
+##################################
+# Preparing the training data
+##################################
+X = matrix_x_values
+y = y_values
+
+##################################
+# Performing a one-hot encoding
+# of the target response labels
+##################################
+num_classes = 2
+y_one_hot = np.eye(num_classes)[y]
+```
+
+
+```python
+##################################
+# Defining the neural network components
+##################################
+input_size = 2
+hidden_size1 = 4
+hidden_size2 = 4
+hidden_size3 = 4
+output_size = 2
+```
+
+
+```python
+##################################
+# Initializing a neural network model object
+# with sigmoid activation function
+##################################
+np.random.seed(88888)
+nn_sigmoid = NeuralNetwork_Sigmoid(input_size, hidden_size1, hidden_size2, hidden_size3, output_size)
+```
+
+
+```python
+##################################
+# Training a neural network model
+# with sigmoid activation function
+##################################
+nn_sigmoid.train(X, y_one_hot, epochs=1000, lr=0.01)
+```
+
+    Epoch 0: Loss 0.316009360251368, Accuracy 0.7484662576687117
+    Epoch 100: Loss 0.29042169855505795, Accuracy 0.7484662576687117
+    Epoch 200: Loss 0.28610782259171613, Accuracy 0.7484662576687117
+    Epoch 300: Loss 0.28461132823164115, Accuracy 0.7484662576687117
+    Epoch 400: Loss 0.2835652925120681, Accuracy 0.7484662576687117
+    Epoch 500: Loss 0.2826104420839403, Accuracy 0.7484662576687117
+    Epoch 600: Loss 0.281684171341873, Accuracy 0.7484662576687117
+    Epoch 700: Loss 0.28077152406724765, Accuracy 0.7484662576687117
+    Epoch 800: Loss 0.27986564301503736, Accuracy 0.7484662576687117
+    Epoch 900: Loss 0.2789612062764938, Accuracy 0.7484662576687117
+    
+
+
+```python
+##################################
+# Plotting the computed gradients
+# of the neural network model
+# with sigmoid activation function
+##################################
+plt.figure(figsize=(10, 6))
+for key, value in nn_sigmoid.gradients.items():
+    plt.plot(value, label=key)
+plt.title('Sigmoid Activation: Gradients by Iteration')
+plt.xlabel('Iterations')
+plt.ylabel('Gradients')
+plt.ylim(-0.05, 0.50)
+plt.xlim(-50,1000)
+plt.legend(loc="upper left")
+plt.show()
+```
+
+
+    
+![png](output_174_0.png)
+    
+
+
+
+```python
+##################################
+# Plotting the computed cost
+# of the neural network model
+# with sigmoid activation function
+##################################
+plt.figure(figsize=(10, 6))
+plt.plot(nn_sigmoid.losses)
+plt.title('Sigmoid Activation: Cost Function by Iteration')
+plt.xlabel('Iterations')
+plt.ylabel('Cost')
+plt.ylim(0.05, 0.70)
+plt.xlim(-50,1000)
+plt.show()
+```
+
+
+    
+![png](output_175_0.png)
+    
+
+
+
+```python
+##################################
+# Plotting the computed accuracy
+# of the neural network model
+# with sigmoid activation function
+##################################
+plt.figure(figsize=(10, 6))
+plt.plot(nn_sigmoid.accuracies)
+plt.title('Sigmoid Activation: Classification by Iteration')
+plt.xlabel('Iterations')
+plt.ylabel('Accuracy')
+plt.ylim(0.00, 1.00)
+plt.xlim(-50,1000)
+plt.show()
+```
+
+
+    
+![png](output_176_0.png)
+    
+
 
 ### 1.6.3 Rectified Linear Unit Activation Function <a class="anchor" id="1.6.3"></a>
 
@@ -5477,8 +5721,238 @@ ax.legend(loc='upper left',title='CANRAT');
 
 
 ```python
+##################################
+# Creating a class object
+# for the neural network algorithm
+# using a RELU activation function
+##################################
+import numpy as np
+import matplotlib.pyplot as plt
+
+class NeuralNetwork_RELU:
+    def __init__(self, input_size, hidden_size1, hidden_size2, hidden_size3, output_size):
+        self.weights1 = np.random.randn(input_size, hidden_size1)
+        self.bias1 = np.zeros((1, hidden_size1))
+        
+        self.weights2 = np.random.randn(hidden_size1, hidden_size2)
+        self.bias2 = np.zeros((1, hidden_size2))
+        
+        self.weights3 = np.random.randn(hidden_size2, hidden_size3)
+        self.bias3 = np.zeros((1, hidden_size3))
+        
+        self.weights4 = np.random.randn(hidden_size3, output_size)
+        self.bias4 = np.zeros((1, output_size))
+        
+        self.gradients = {'dw1': [], 'db1': [], 'dw2': [], 'db2': [], 'dw3': [], 'db3': [], 'dw4': [], 'db4': []}
+        self.losses = []
+        self.accuracies = []
+        
+    def relu(self, x):
+        return np.maximum(0, x)
+    
+    def softmax(self, x):
+        exps = np.exp(x - np.max(x, axis=1, keepdims=True))
+        return exps / np.sum(exps, axis=1, keepdims=True)
+    
+    def forward(self, x):
+        self.hidden1 = self.relu(np.dot(x, self.weights1) + self.bias1)
+        self.hidden2 = self.relu(np.dot(self.hidden1, self.weights2) + self.bias2)
+        self.hidden3 = self.relu(np.dot(self.hidden2, self.weights3) + self.bias3)
+        self.output = self.softmax(np.dot(self.hidden3, self.weights4) + self.bias4)
+        
+        return self.output
+    
+    def backward(self, x, y, lr):
+        m = x.shape[0]
+        
+        # Computing the output layer gradients
+        output_error = self.output - y
+        output_delta = output_error / m
+        
+        # Computing the hidden layer 3 gradients
+        hidden3_error = np.dot(output_delta, self.weights4.T)
+        hidden3_delta = hidden3_error * (self.hidden3 > 0)
+        
+        # Computing the hidden layer 2 gradients
+        hidden2_error = np.dot(hidden3_delta, self.weights3.T)
+        hidden2_delta = hidden2_error * (self.hidden2 > 0)
+        
+        # Computing the hidden layer 1 gradients
+        hidden1_error = np.dot(hidden2_delta, self.weights2.T)
+        hidden1_delta = hidden1_error * (self.hidden1 > 0)
+        
+        # Updating weights and biases based on computed gradients
+        self.weights4 -= lr * np.dot(self.hidden3.T, output_delta)
+        self.bias4 -= lr * np.sum(output_delta, axis=0, keepdims=True)
+        
+        self.weights3 -= lr * np.dot(self.hidden2.T, hidden3_delta)
+        self.bias3 -= lr * np.sum(hidden3_delta, axis=0, keepdims=True)
+        
+        self.weights2 -= lr * np.dot(self.hidden1.T, hidden2_delta)
+        self.bias2 -= lr * np.sum(hidden2_delta, axis=0, keepdims=True)
+        
+        self.weights1 -= lr * np.dot(x.T, hidden1_delta)
+        self.bias1 -= lr * np.sum(hidden1_delta, axis=0, keepdims=True)
+        
+        # Storing computed gradients
+        self.gradients['dw1'].append(np.mean(np.abs(hidden1_delta)))
+        self.gradients['db1'].append(np.mean(np.abs(self.bias1)))
+        self.gradients['dw2'].append(np.mean(np.abs(hidden2_delta)))
+        self.gradients['db2'].append(np.mean(np.abs(self.bias2)))
+        self.gradients['dw3'].append(np.mean(np.abs(hidden3_delta)))
+        self.gradients['db3'].append(np.mean(np.abs(self.bias3)))
+        self.gradients['dw4'].append(np.mean(np.abs(output_delta)))
+        self.gradients['db4'].append(np.mean(np.abs(self.bias4)))
+        
+    def train(self, x, y, epochs, lr):
+        for i in range(epochs):
+            output = self.forward(x)
+            self.backward(x, y, lr)
+            loss = -np.mean(y * np.log(output))
+            self.losses.append(loss)
+            accuracy = self.accuracy(x, np.argmax(y, axis=1))
+            self.accuracies.append(accuracy)
+            if i % 100 == 0:
+                print(f'Epoch {i}: Loss {loss}, Accuracy {accuracy}')
+                
+    def predict(self, x):
+        return np.argmax(self.forward(x), axis=1)
+    
+    def accuracy(self, x, y):
+        pred = self.predict(x)
+        return np.mean(pred == y)
 
 ```
+
+
+```python
+##################################
+# Preparing the training data
+##################################
+X = matrix_x_values
+y = y_values
+
+##################################
+# Performing a one-hot encoding
+# of the target response labels
+##################################
+num_classes = 2
+y_one_hot = np.eye(num_classes)[y]
+```
+
+
+```python
+##################################
+# Defining the neural network components
+##################################
+input_size = 2
+hidden_size1 = 4
+hidden_size2 = 4
+hidden_size3 = 4
+output_size = 2
+```
+
+
+```python
+##################################
+# Initializing a neural network model object
+# with RELU activation function
+##################################
+np.random.seed(88888)
+nn_relu = NeuralNetwork_RELU(input_size, hidden_size1, hidden_size2, hidden_size3, output_size)
+```
+
+
+```python
+##################################
+# Training a neural network model
+# with RELU activation function
+##################################
+nn_relu.train(X, y_one_hot, epochs=1000, lr=0.01)
+```
+
+    Epoch 0: Loss 0.3700211712894535, Accuracy 0.2822085889570552
+    Epoch 100: Loss 0.17942495875926143, Accuracy 0.901840490797546
+    Epoch 200: Loss 0.13224275039852634, Accuracy 0.9079754601226994
+    Epoch 300: Loss 0.11676788805888334, Accuracy 0.9141104294478528
+    Epoch 400: Loss 0.10890482140743656, Accuracy 0.9202453987730062
+    Epoch 500: Loss 0.10455617528678202, Accuracy 0.9202453987730062
+    Epoch 600: Loss 0.10189142339749102, Accuracy 0.9202453987730062
+    Epoch 700: Loss 0.09987241742776296, Accuracy 0.9263803680981595
+    Epoch 800: Loss 0.09805768178547355, Accuracy 0.9325153374233128
+    Epoch 900: Loss 0.09697282986650115, Accuracy 0.9325153374233128
+    
+
+
+```python
+##################################
+# Plotting the computed gradients
+# of the neural network model
+# with RELU activation function
+##################################
+plt.figure(figsize=(10, 6))
+for key, value in nn_relu.gradients.items():
+    plt.plot(value, label=key)
+plt.title('RELU Activation: Gradients by Iteration')
+plt.xlabel('Iterations')
+plt.ylabel('Gradients')
+plt.ylim(-0.05, 0.50)
+plt.xlim(-50,1000)
+plt.legend(loc="upper left")
+plt.show()
+```
+
+
+    
+![png](output_183_0.png)
+    
+
+
+
+```python
+##################################
+# Plotting the computed cost
+# of the neural network model
+# with RELU activation function
+##################################
+plt.figure(figsize=(10, 6))
+plt.plot(nn_relu.losses)
+plt.title('RELU Activation: Cost Function by Iteration')
+plt.xlabel('Iterations')
+plt.ylabel('Cost')
+plt.ylim(0.05, 0.70)
+plt.xlim(-50,1000)
+plt.show()
+```
+
+
+    
+![png](output_184_0.png)
+    
+
+
+
+```python
+##################################
+# Plotting the computed accuracy
+# of the neural network model
+# with RELU activation function
+##################################
+plt.figure(figsize=(10, 6))
+plt.plot(nn_relu.accuracies)
+plt.title('RELU Activation: Classification by Iteration')
+plt.xlabel('Iterations')
+plt.ylabel('Accuracy')
+plt.ylim(0.00, 1.00)
+plt.xlim(-50,1000)
+plt.show()
+```
+
+
+    
+![png](output_185_0.png)
+    
+
 
 ### 1.6.4 Leaky Rectified Linear Unit Activation Function <a class="anchor" id="1.6.4"></a>
 
@@ -5498,8 +5972,235 @@ ax.legend(loc='upper left',title='CANRAT');
 
 
 ```python
-
+##################################
+# Creating a class object
+# for the neural network algorithm
+# using a Leaky RELU activation function
+##################################
+class NeuralNetwork_LeakyRELU:
+    def __init__(self, input_size, hidden_size1, hidden_size2, hidden_size3, output_size):
+        self.weights1 = np.random.randn(input_size, hidden_size1)
+        self.bias1 = np.zeros((1, hidden_size1))
+        
+        self.weights2 = np.random.randn(hidden_size1, hidden_size2)
+        self.bias2 = np.zeros((1, hidden_size2))
+        
+        self.weights3 = np.random.randn(hidden_size2, hidden_size3)
+        self.bias3 = np.zeros((1, hidden_size3))
+        
+        self.weights4 = np.random.randn(hidden_size3, output_size)
+        self.bias4 = np.zeros((1, output_size))
+        
+        self.gradients = {'dw1': [], 'db1': [], 'dw2': [], 'db2': [], 'dw3': [], 'db3': [], 'dw4': [], 'db4': []}
+        self.losses = []
+        self.accuracies = []
+        
+    def leaky_relu(self, x, alpha=0.01):
+        return np.where(x > 0, x, alpha * x)
+    
+    def softmax(self, x):
+        exps = np.exp(x - np.max(x, axis=1, keepdims=True))
+        return exps / np.sum(exps, axis=1, keepdims=True)
+    
+    def forward(self, x):
+        self.hidden1 = self.leaky_relu(np.dot(x, self.weights1) + self.bias1)
+        self.hidden2 = self.leaky_relu(np.dot(self.hidden1, self.weights2) + self.bias2)
+        self.hidden3 = self.leaky_relu(np.dot(self.hidden2, self.weights3) + self.bias3)
+        self.output = self.softmax(np.dot(self.hidden3, self.weights4) + self.bias4)
+        
+        return self.output
+    
+    def backward(self, x, y, lr):
+        m = x.shape[0]
+        
+        # Computing the output layer gradients
+        output_error = self.output - y
+        output_delta = output_error / m
+        
+        # Computing the hidden layer 3 gradients
+        hidden3_error = np.dot(output_delta, self.weights4.T)
+        hidden3_delta = hidden3_error * (self.hidden3 > 0) + 0.01 * hidden3_error * (self.hidden3 <= 0)
+        
+        # Computing the hidden layer 2 gradients
+        hidden2_error = np.dot(hidden3_delta, self.weights3.T)
+        hidden2_delta = hidden2_error * (self.hidden2 > 0) + 0.01 * hidden2_error * (self.hidden2 <= 0)
+        
+        # Computing the hidden layer 1 gradients
+        hidden1_error = np.dot(hidden2_delta, self.weights2.T)
+        hidden1_delta = hidden1_error * (self.hidden1 > 0) + 0.01 * hidden1_error * (self.hidden1 <= 0)
+        
+        # Updating weights and biases based on computed gradients
+        self.weights4 -= lr * np.dot(self.hidden3.T, output_delta)
+        self.bias4 -= lr * np.sum(output_delta, axis=0, keepdims=True)
+        
+        self.weights3 -= lr * np.dot(self.hidden2.T, hidden3_delta)
+        self.bias3 -= lr * np.sum(hidden3_delta, axis=0, keepdims=True)
+        
+        self.weights2 -= lr * np.dot(self.hidden1.T, hidden2_delta)
+        self.bias2 -= lr * np.sum(hidden2_delta, axis=0, keepdims=True)
+        
+        self.weights1 -= lr * np.dot(x.T, hidden1_delta)
+        self.bias1 -= lr * np.sum(hidden1_delta, axis=0, keepdims=True)
+        
+        # Storing updated gradients
+        self.gradients['dw1'].append(np.mean(np.abs(hidden1_delta)))
+        self.gradients['db1'].append(np.mean(np.abs(self.bias1)))
+        self.gradients['dw2'].append(np.mean(np.abs(hidden2_delta)))
+        self.gradients['db2'].append(np.mean(np.abs(self.bias2)))
+        self.gradients['dw3'].append(np.mean(np.abs(hidden3_delta)))
+        self.gradients['db3'].append(np.mean(np.abs(self.bias3)))
+        self.gradients['dw4'].append(np.mean(np.abs(output_delta)))
+        self.gradients['db4'].append(np.mean(np.abs(self.bias4)))
+        
+    def train(self, x, y, epochs, lr):
+        for i in range(epochs):
+            output = self.forward(x)
+            self.backward(x, y, lr)
+            loss = -np.mean(y * np.log(output))
+            self.losses.append(loss)
+            accuracy = self.accuracy(x, np.argmax(y, axis=1))
+            self.accuracies.append(accuracy)
+            if i % 100 == 0:
+                print(f'Epoch {i}: Loss {loss}, Accuracy {accuracy}')
+                
+    def predict(self, x):
+        return np.argmax(self.forward(x), axis=1)
+    
+    def accuracy(self, x, y):
+        pred = self.predict(x)
+        return np.mean(pred == y)
+    
 ```
+
+
+```python
+##################################
+# Preparing the training data
+##################################
+X = matrix_x_values
+y = y_values
+
+##################################
+# Performing a one-hot encoding
+# of the target response labels
+##################################
+num_classes = 2
+y_one_hot = np.eye(num_classes)[y]
+```
+
+
+```python
+##################################
+# Defining the neural network components
+##################################
+input_size = 2
+hidden_size1 = 4
+hidden_size2 = 4
+hidden_size3 = 4
+output_size = 2
+```
+
+
+```python
+##################################
+# Initializing a neural network model object
+# with RELU activation function
+##################################
+np.random.seed(88888)
+nn_leakyrelu = NeuralNetwork_LeakyRELU(input_size, hidden_size1, hidden_size2, hidden_size3, output_size)
+```
+
+
+```python
+##################################
+# Training a neural network model
+# with Leaky RELU activation function
+##################################
+nn_leakyrelu.train(X, y_one_hot, epochs=1000, lr=0.01)
+```
+
+    Epoch 0: Loss 0.3847212964012993, Accuracy 0.2883435582822086
+    Epoch 100: Loss 0.17809526047094637, Accuracy 0.901840490797546
+    Epoch 200: Loss 0.13089084904708354, Accuracy 0.9079754601226994
+    Epoch 300: Loss 0.11603864399086145, Accuracy 0.9141104294478528
+    Epoch 400: Loss 0.10898369629833157, Accuracy 0.9141104294478528
+    Epoch 500: Loss 0.10463433600701245, Accuracy 0.9202453987730062
+    Epoch 600: Loss 0.10135582285346631, Accuracy 0.9202453987730062
+    Epoch 700: Loss 0.09930395510126533, Accuracy 0.9202453987730062
+    Epoch 800: Loss 0.09788569124803327, Accuracy 0.9263803680981595
+    Epoch 900: Loss 0.09693492291763071, Accuracy 0.9325153374233128
+    
+
+
+```python
+##################################
+# Plotting the computed gradients
+# of the neural network model
+# with RELU activation function
+##################################
+plt.figure(figsize=(10, 6))
+for key, value in nn_leakyrelu.gradients.items():
+    plt.plot(value, label=key)
+plt.title('Leaky RELU Activation: Gradients by Iteration')
+plt.xlabel('Iterations')
+plt.ylabel('Gradients')
+plt.ylim(-0.05, 0.50)
+plt.xlim(-50,1000)
+plt.legend(loc="upper left")
+plt.show()
+```
+
+
+    
+![png](output_192_0.png)
+    
+
+
+
+```python
+##################################
+# Plotting the computed cost
+# of the neural network model
+# with Leaky RELU activation function
+##################################
+plt.figure(figsize=(10, 6))
+plt.plot(nn_leakyrelu.losses)
+plt.title('Leaky RELU Activation: Cost Function by Iteration')
+plt.xlabel('Iterations')
+plt.ylabel('Cost')
+plt.ylim(0.05, 0.70)
+plt.xlim(-50,1000)
+plt.show()
+```
+
+
+    
+![png](output_193_0.png)
+    
+
+
+
+```python
+##################################
+# Plotting the computed accuracy
+# of the neural network model
+# with Leaky RELU activation function
+##################################
+plt.figure(figsize=(10, 6))
+plt.plot(nn_leakyrelu.accuracies)
+plt.title('Leaky RELU Activation: Classification by Iteration')
+plt.xlabel('Iterations')
+plt.ylabel('Accuracy')
+plt.ylim(0.00, 1.00)
+plt.xlim(-50,1000)
+plt.show()
+```
+
+
+    
+![png](output_194_0.png)
+    
+
 
 ### 1.6.5 Exponential Linear Unit <a class="anchor" id="1.6.5"></a>
 
@@ -5519,8 +6220,235 @@ ax.legend(loc='upper left',title='CANRAT');
 
 
 ```python
-
+##################################
+# Creating a class object
+# for the neural network algorithm
+# using an ELU activation function
+##################################
+class NeuralNetwork_ELU:
+    def __init__(self, input_size, hidden_size1, hidden_size2, hidden_size3, output_size):
+        self.weights1 = np.random.randn(input_size, hidden_size1)
+        self.bias1 = np.zeros((1, hidden_size1))
+        
+        self.weights2 = np.random.randn(hidden_size1, hidden_size2)
+        self.bias2 = np.zeros((1, hidden_size2))
+        
+        self.weights3 = np.random.randn(hidden_size2, hidden_size3)
+        self.bias3 = np.zeros((1, hidden_size3))
+        
+        self.weights4 = np.random.randn(hidden_size3, output_size)
+        self.bias4 = np.zeros((1, output_size))
+        
+        self.gradients = {'dw1': [], 'db1': [], 'dw2': [], 'db2': [], 'dw3': [], 'db3': [], 'dw4': [], 'db4': []}
+        self.losses = []
+        self.accuracies = []
+        
+    def elu(self, x, alpha=1.0):
+        return np.where(x > 0, x, alpha * (np.exp(x) - 1))
+    
+    def softmax(self, x):
+        exps = np.exp(x - np.max(x, axis=1, keepdims=True))
+        return exps / np.sum(exps, axis=1, keepdims=True)
+    
+    def forward(self, x):
+        self.hidden1 = self.elu(np.dot(x, self.weights1) + self.bias1)
+        self.hidden2 = self.elu(np.dot(self.hidden1, self.weights2) + self.bias2)
+        self.hidden3 = self.elu(np.dot(self.hidden2, self.weights3) + self.bias3)
+        self.output = self.softmax(np.dot(self.hidden3, self.weights4) + self.bias4)
+        
+        return self.output
+    
+    def backward(self, x, y, lr):
+        m = x.shape[0]
+        
+        # Computing output layer gradients
+        output_error = self.output - y
+        output_delta = output_error / m
+        
+        # Computing hidden layer 3 gradients
+        hidden3_error = np.dot(output_delta, self.weights4.T)
+        hidden3_delta = hidden3_error * (self.hidden3 > 0) + (np.exp(self.hidden3) - 1) * (self.hidden3 <= 0)
+        
+        # Computing hidden layer 2 gradients
+        hidden2_error = np.dot(hidden3_delta, self.weights3.T)
+        hidden2_delta = hidden2_error * (self.hidden2 > 0) + (np.exp(self.hidden2) - 1) * (self.hidden2 <= 0)
+        
+        # Computing hidden layer 1 gradients
+        hidden1_error = np.dot(hidden2_delta, self.weights2.T)
+        hidden1_delta = hidden1_error * (self.hidden1 > 0) + (np.exp(self.hidden1) - 1) * (self.hidden1 <= 0)
+        
+        # Updating weights and biases based on computed gradients
+        self.weights4 -= lr * np.dot(self.hidden3.T, output_delta)
+        self.bias4 -= lr * np.sum(output_delta, axis=0, keepdims=True)
+        
+        self.weights3 -= lr * np.dot(self.hidden2.T, hidden3_delta)
+        self.bias3 -= lr * np.sum(hidden3_delta, axis=0, keepdims=True)
+        
+        self.weights2 -= lr * np.dot(self.hidden1.T, hidden2_delta)
+        self.bias2 -= lr * np.sum(hidden2_delta, axis=0, keepdims=True)
+        
+        self.weights1 -= lr * np.dot(x.T, hidden1_delta)
+        self.bias1 -= lr * np.sum(hidden1_delta, axis=0, keepdims=True)
+        
+        # Storing updated gradients
+        self.gradients['dw1'].append(np.mean(np.abs(hidden1_delta)))
+        self.gradients['db1'].append(np.mean(np.abs(self.bias1)))
+        self.gradients['dw2'].append(np.mean(np.abs(hidden2_delta)))
+        self.gradients['db2'].append(np.mean(np.abs(self.bias2)))
+        self.gradients['dw3'].append(np.mean(np.abs(hidden3_delta)))
+        self.gradients['db3'].append(np.mean(np.abs(self.bias3)))
+        self.gradients['dw4'].append(np.mean(np.abs(output_delta)))
+        self.gradients['db4'].append(np.mean(np.abs(self.bias4)))
+        
+    def train(self, x, y, epochs, lr):
+        for i in range(epochs):
+            output = self.forward(x)
+            self.backward(x, y, lr)
+            loss = -np.mean(y * np.log(output))
+            self.losses.append(loss)
+            accuracy = self.accuracy(x, np.argmax(y, axis=1))
+            self.accuracies.append(accuracy)
+            if i % 100 == 0:
+                print(f'Epoch {i}: Loss {loss}, Accuracy {accuracy}')
+                
+    def predict(self, x):
+        return np.argmax(self.forward(x), axis=1)
+    
+    def accuracy(self, x, y):
+        pred = self.predict(x)
+        return np.mean(pred == y)
+    
 ```
+
+
+```python
+##################################
+# Preparing the training data
+##################################
+X = matrix_x_values
+y = y_values
+
+##################################
+# Performing a one-hot encoding
+# of the target response labels
+##################################
+num_classes = 2
+y_one_hot = np.eye(num_classes)[y]
+```
+
+
+```python
+##################################
+# Defining the neural network components
+##################################
+input_size = 2
+hidden_size1 = 4
+hidden_size2 = 4
+hidden_size3 = 4
+output_size = 2
+```
+
+
+```python
+##################################
+# Initializing a neural network model object
+# with ELU activation function
+##################################
+np.random.seed(88888)
+nn_elu = NeuralNetwork_ELU(input_size, hidden_size1, hidden_size2, hidden_size3, output_size)
+```
+
+
+```python
+##################################
+# Training a neural network model
+# with ELU activation function
+##################################
+nn_elu.train(X, y_one_hot, epochs=1000, lr=0.01)
+```
+
+    Epoch 0: Loss 0.6239532743548977, Accuracy 0.6748466257668712
+    Epoch 100: Loss 0.18559850810160436, Accuracy 0.7852760736196319
+    Epoch 200: Loss 0.15591484175735912, Accuracy 0.8711656441717791
+    Epoch 300: Loss 0.13187741248142656, Accuracy 0.901840490797546
+    Epoch 400: Loss 0.11492254996431342, Accuracy 0.9141104294478528
+    Epoch 500: Loss 0.10509129045149063, Accuracy 0.9263803680981595
+    Epoch 600: Loss 0.10021355309897714, Accuracy 0.9263803680981595
+    Epoch 700: Loss 0.0977143414467875, Accuracy 0.9263803680981595
+    Epoch 800: Loss 0.09611887321358306, Accuracy 0.9263803680981595
+    Epoch 900: Loss 0.0950962862639301, Accuracy 0.9263803680981595
+    
+
+
+```python
+##################################
+# Plotting the computed gradients
+# of the neural network model
+# with ELU activation function
+##################################
+plt.figure(figsize=(10, 6))
+for key, value in nn_elu.gradients.items():
+    plt.plot(value, label=key)
+plt.title('ELU Activation: Gradients by Iteration')
+plt.xlabel('Iterations')
+plt.ylabel('Gradients')
+plt.ylim(-0.05, 0.50)
+plt.xlim(-50,1000)
+plt.legend(loc="upper left")
+plt.show()
+```
+
+
+    
+![png](output_201_0.png)
+    
+
+
+
+```python
+##################################
+# Plotting the computed cost
+# of the neural network model
+# with ELU activation function
+##################################
+plt.figure(figsize=(10, 6))
+plt.plot(nn_elu.losses)
+plt.title('ELU Activation: Cost Function by Iteration')
+plt.xlabel('Iterations')
+plt.ylabel('Cost')
+plt.ylim(0.05, 0.70)
+plt.xlim(-50,1000)
+plt.show()
+```
+
+
+    
+![png](output_202_0.png)
+    
+
+
+
+```python
+##################################
+# Plotting the computed accuracy
+# of the neural network model
+# with ELU activation function
+##################################
+plt.figure(figsize=(10, 6))
+plt.plot(nn_elu.accuracies)
+plt.title('ELU Activation: Classification by Iteration')
+plt.xlabel('Iterations')
+plt.ylabel('Accuracy')
+plt.ylim(0.00, 1.00)
+plt.xlim(-50,1000)
+plt.show()
+```
+
+
+    
+![png](output_203_0.png)
+    
+
 
 ### 1.6.6 Scaled Exponential Linear Unit <a class="anchor" id="1.6.6"></a>
 
@@ -5540,8 +6468,236 @@ ax.legend(loc='upper left',title='CANRAT');
 
 
 ```python
-
+##################################
+# Creating a class object
+# for the neural network algorithm
+# using a SELU activation function
+##################################
+class NeuralNetwork_SELU:
+    def __init__(self, input_size, hidden_size1, hidden_size2, hidden_size3, output_size):
+        self.weights1 = np.random.randn(input_size, hidden_size1)
+        self.bias1 = np.zeros((1, hidden_size1))
+        
+        self.weights2 = np.random.randn(hidden_size1, hidden_size2)
+        self.bias2 = np.zeros((1, hidden_size2))
+        
+        self.weights3 = np.random.randn(hidden_size2, hidden_size3)
+        self.bias3 = np.zeros((1, hidden_size3))
+        
+        self.weights4 = np.random.randn(hidden_size3, output_size)
+        self.bias4 = np.zeros((1, output_size))
+        
+        self.gradients = {'dw1': [], 'db1': [], 'dw2': [], 'db2': [], 'dw3': [], 'db3': [], 'dw4': [], 'db4': []}
+        self.losses = []
+        self.accuracies = []
+        
+    def selu(self, x):
+        alpha = 1.6732632423543772848170429916717
+        scale = 1.0507009873554804934193349852946
+        return scale * np.where(x > 0, x, alpha * (np.exp(x) - 1))
+    
+    def softmax(self, x):
+        exps = np.exp(x - np.max(x, axis=1, keepdims=True))
+        return exps / np.sum(exps, axis=1, keepdims=True)
+    
+    def forward(self, x):
+        self.hidden1 = self.selu(np.dot(x, self.weights1) + self.bias1)
+        self.hidden2 = self.selu(np.dot(self.hidden1, self.weights2) + self.bias2)
+        self.hidden3 = self.selu(np.dot(self.hidden2, self.weights3) + self.bias3)
+        self.output = self.softmax(np.dot(self.hidden3, self.weights4) + self.bias4)
+        
+        return self.output
+    
+    def backward(self, x, y, lr):
+        m = x.shape[0]
+        
+        # Computing output layer gradients
+        output_error = self.output - y
+        output_delta = output_error / m
+        
+        # Computing hidden layer 3 gradients
+        hidden3_error = np.dot(output_delta, self.weights4.T)
+        hidden3_delta = hidden3_error * (self.hidden3 > 0)
+        
+        # Computing hidden layer 2 gradients
+        hidden2_error = np.dot(hidden3_delta, self.weights3.T)
+        hidden2_delta = hidden2_error * (self.hidden2 > 0)
+        
+        # Computing hidden layer 1 gradients
+        hidden1_error = np.dot(hidden2_delta, self.weights2.T)
+        hidden1_delta = hidden1_error * (self.hidden1 > 0)
+        
+        # Updating weights and biases based on computed gradients
+        self.weights4 -= lr * np.dot(self.hidden3.T, output_delta)
+        self.bias4 -= lr * np.sum(output_delta, axis=0, keepdims=True)
+        
+        self.weights3 -= lr * np.dot(self.hidden2.T, hidden3_delta)
+        self.bias3 -= lr * np.sum(hidden3_delta, axis=0, keepdims=True)
+        
+        self.weights2 -= lr * np.dot(self.hidden1.T, hidden2_delta)
+        self.bias2 -= lr * np.sum(hidden2_delta, axis=0, keepdims=True)
+        
+        self.weights1 -= lr * np.dot(x.T, hidden1_delta)
+        self.bias1 -= lr * np.sum(hidden1_delta, axis=0, keepdims=True)
+        
+        # Storing computed gradients
+        self.gradients['dw1'].append(np.mean(np.abs(hidden1_delta)))
+        self.gradients['db1'].append(np.mean(np.abs(self.bias1)))
+        self.gradients['dw2'].append(np.mean(np.abs(hidden2_delta)))
+        self.gradients['db2'].append(np.mean(np.abs(self.bias2)))
+        self.gradients['dw3'].append(np.mean(np.abs(hidden3_delta)))
+        self.gradients['db3'].append(np.mean(np.abs(self.bias3)))
+        self.gradients['dw4'].append(np.mean(np.abs(output_delta)))
+        self.gradients['db4'].append(np.mean(np.abs(self.bias4)))
+        
+    def train(self, x, y, epochs, lr):
+        for i in range(epochs):
+            output = self.forward(x)
+            self.backward(x, y, lr)
+            loss = -np.mean(y * np.log(output))
+            self.losses.append(loss)
+            accuracy = self.accuracy(x, np.argmax(y, axis=1))
+            self.accuracies.append(accuracy)
+            if i % 100 == 0:
+                print(f'Epoch {i}: Loss {loss}, Accuracy {accuracy}')
+                
+    def predict(self, x):
+        return np.argmax(self.forward(x), axis=1)
+    
+    def accuracy(self, x, y):
+        pred = self.predict(x)
+        return np.mean(pred == y)
 ```
+
+
+```python
+##################################
+# Preparing the training data
+##################################
+X = matrix_x_values
+y = y_values
+
+##################################
+# Performing a one-hot encoding
+# of the target response labels
+##################################
+num_classes = 2
+y_one_hot = np.eye(num_classes)[y]
+```
+
+
+```python
+##################################
+# Defining the neural network components
+##################################
+input_size = 2
+hidden_size1 = 4
+hidden_size2 = 4
+hidden_size3 = 4
+output_size = 2
+```
+
+
+```python
+##################################
+# Initializing a neural network model object
+# with SELU activation function
+##################################
+np.random.seed(88888)
+nn_selu = NeuralNetwork_SELU(input_size, hidden_size1, hidden_size2, hidden_size3, output_size)
+```
+
+
+```python
+##################################
+# Training a neural network model
+# with SELU activation function
+##################################
+nn_selu.train(X, y_one_hot, epochs=1000, lr=0.01)
+```
+
+    Epoch 0: Loss 1.0981323160350684, Accuracy 0.3006134969325153
+    Epoch 100: Loss 0.19448595679954012, Accuracy 0.8343558282208589
+    Epoch 200: Loss 0.15078198879619664, Accuracy 0.8773006134969326
+    Epoch 300: Loss 0.13087303505062367, Accuracy 0.8773006134969326
+    Epoch 400: Loss 0.11912606258714767, Accuracy 0.8773006134969326
+    Epoch 500: Loss 0.11149519060605417, Accuracy 0.8895705521472392
+    Epoch 600: Loss 0.10641661771976163, Accuracy 0.901840490797546
+    Epoch 700: Loss 0.10280038529399513, Accuracy 0.901840490797546
+    Epoch 800: Loss 0.10017443966015953, Accuracy 0.901840490797546
+    Epoch 900: Loss 0.09822970379617403, Accuracy 0.8957055214723927
+    
+
+
+```python
+##################################
+# Plotting the computed gradients
+# of the neural network model
+# with SELU activation function
+##################################
+plt.figure(figsize=(10, 6))
+for key, value in nn_selu.gradients.items():
+    plt.plot(value, label=key)
+plt.title('SELU Activation: Gradients by Iteration')
+plt.xlabel('Iterations')
+plt.ylabel('Gradients')
+plt.ylim(-0.05, 0.50)
+plt.xlim(-50,1000)
+plt.legend(loc="upper left")
+plt.show()
+```
+
+
+    
+![png](output_210_0.png)
+    
+
+
+
+```python
+##################################
+# Plotting the computed cost
+# of the neural network model
+# with SELU activation function
+##################################
+plt.figure(figsize=(10, 6))
+plt.plot(nn_selu.losses)
+plt.title('SELU Activation: Cost Function by Iteration')
+plt.xlabel('Iterations')
+plt.ylabel('Cost')
+plt.ylim(0.05, 0.70)
+plt.xlim(-50,1000)
+plt.show()
+```
+
+
+    
+![png](output_211_0.png)
+    
+
+
+
+```python
+##################################
+# Plotting the computed accuracy
+# of the neural network model
+# with SELU activation function
+##################################
+plt.figure(figsize=(10, 6))
+plt.plot(nn_selu.accuracies)
+plt.title('SELU Activation: Classification by Iteration')
+plt.xlabel('Iterations')
+plt.ylabel('Accuracy')
+plt.ylim(0.00, 1.00)
+plt.xlim(-50,1000)
+plt.show()
+```
+
+
+    
+![png](output_212_0.png)
+    
+
 
 ### 1.6.7 Randomized Leaky Rectified Linear Unit <a class="anchor" id="1.6.7"></a>
 
@@ -5561,8 +6717,236 @@ ax.legend(loc='upper left',title='CANRAT');
 
 
 ```python
-
+##################################
+# Creating a class object
+# for the neural network algorithm
+# using a RRELU activation function
+##################################
+class NeuralNetwork_RRELU:
+    def __init__(self, input_size, hidden_size1, hidden_size2, hidden_size3, output_size):
+        self.weights1 = np.random.randn(input_size, hidden_size1)
+        self.bias1 = np.zeros((1, hidden_size1))
+        
+        self.weights2 = np.random.randn(hidden_size1, hidden_size2)
+        self.bias2 = np.zeros((1, hidden_size2))
+        
+        self.weights3 = np.random.randn(hidden_size2, hidden_size3)
+        self.bias3 = np.zeros((1, hidden_size3))
+        
+        self.weights4 = np.random.randn(hidden_size3, output_size)
+        self.bias4 = np.zeros((1, output_size))
+        
+        self.gradients = {'dw1': [], 'db1': [], 'dw2': [], 'db2': [], 'dw3': [], 'db3': [], 'dw4': [], 'db4': []}
+        self.losses = []
+        self.accuracies = []
+        
+    def randomized_leaky_relu(self, x):
+        alpha = np.random.uniform(0.01, 0.1)  # Randomly generate alpha in the range [0.01, 0.1]
+        return np.where(x > 0, x, alpha * x)
+    
+    def softmax(self, x):
+        exps = np.exp(x - np.max(x, axis=1, keepdims=True))
+        return exps / np.sum(exps, axis=1, keepdims=True)
+    
+    def forward(self, x):
+        self.hidden1 = self.randomized_leaky_relu(np.dot(x, self.weights1) + self.bias1)
+        self.hidden2 = self.randomized_leaky_relu(np.dot(self.hidden1, self.weights2) + self.bias2)
+        self.hidden3 = self.randomized_leaky_relu(np.dot(self.hidden2, self.weights3) + self.bias3)
+        self.output = self.softmax(np.dot(self.hidden3, self.weights4) + self.bias4)
+        
+        return self.output
+    
+    def backward(self, x, y, lr):
+        m = x.shape[0]
+        
+        # Computing output layer gradients
+        output_error = self.output - y
+        output_delta = output_error / m
+        
+        # Computing hidden layer 3 gradients
+        hidden3_error = np.dot(output_delta, self.weights4.T)
+        hidden3_delta = hidden3_error * (self.hidden3 > 0) + 0.01 * hidden3_error * (self.hidden3 <= 0)
+        
+        # Computing hidden layer 2 gradients
+        hidden2_error = np.dot(hidden3_delta, self.weights3.T)
+        hidden2_delta = hidden2_error * (self.hidden2 > 0) + 0.01 * hidden2_error * (self.hidden2 <= 0)
+        
+        # Computing hidden layer 1 gradients
+        hidden1_error = np.dot(hidden2_delta, self.weights2.T)
+        hidden1_delta = hidden1_error * (self.hidden1 > 0) + 0.01 * hidden1_error * (self.hidden1 <= 0)
+        
+        # Update weights and biases based on computed gradients
+        self.weights4 -= lr * np.dot(self.hidden3.T, output_delta)
+        self.bias4 -= lr * np.sum(output_delta, axis=0, keepdims=True)
+        
+        self.weights3 -= lr * np.dot(self.hidden2.T, hidden3_delta)
+        self.bias3 -= lr * np.sum(hidden3_delta, axis=0, keepdims=True)
+        
+        self.weights2 -= lr * np.dot(self.hidden1.T, hidden2_delta)
+        self.bias2 -= lr * np.sum(hidden2_delta, axis=0, keepdims=True)
+        
+        self.weights1 -= lr * np.dot(x.T, hidden1_delta)
+        self.bias1 -= lr * np.sum(hidden1_delta, axis=0, keepdims=True)
+        
+        # Storing computed gradients
+        self.gradients['dw1'].append(np.mean(np.abs(hidden1_delta)))
+        self.gradients['db1'].append(np.mean(np.abs(self.bias1)))
+        self.gradients['dw2'].append(np.mean(np.abs(hidden2_delta)))
+        self.gradients['db2'].append(np.mean(np.abs(self.bias2)))
+        self.gradients['dw3'].append(np.mean(np.abs(hidden3_delta)))
+        self.gradients['db3'].append(np.mean(np.abs(self.bias3)))
+        self.gradients['dw4'].append(np.mean(np.abs(output_delta)))
+        self.gradients['db4'].append(np.mean(np.abs(self.bias4)))
+        
+    def train(self, x, y, epochs, lr):
+        for i in range(epochs):
+            output = self.forward(x)
+            self.backward(x, y, lr)
+            loss = -np.mean(y * np.log(output))
+            self.losses.append(loss)
+            accuracy = self.accuracy(x, np.argmax(y, axis=1))
+            self.accuracies.append(accuracy)
+            if i % 100 == 0:
+                print(f'Epoch {i}: Loss {loss}, Accuracy {accuracy}')
+                
+    def predict(self, x):
+        return np.argmax(self.forward(x), axis=1)
+    
+    def accuracy(self, x, y):
+        pred = self.predict(x)
+        return np.mean(pred == y)
+    
 ```
+
+
+```python
+##################################
+# Preparing the training data
+##################################
+X = matrix_x_values
+y = y_values
+
+##################################
+# Performing a one-hot encoding
+# of the target response labels
+##################################
+num_classes = 2
+y_one_hot = np.eye(num_classes)[y]
+```
+
+
+```python
+##################################
+# Defining the neural network components
+##################################
+input_size = 2
+hidden_size1 = 4
+hidden_size2 = 4
+hidden_size3 = 4
+output_size = 2
+```
+
+
+```python
+##################################
+# Initializing a neural network model object
+# with RRELU activation function
+##################################
+np.random.seed(88888)
+nn_rrelu = NeuralNetwork_RRELU(input_size, hidden_size1, hidden_size2, hidden_size3, output_size)
+```
+
+
+```python
+##################################
+# Training a neural network model
+# with RRELU activation function
+##################################
+nn_rrelu.train(X, y_one_hot, epochs=1000, lr=0.01)
+```
+
+    Epoch 0: Loss 0.425362770010686, Accuracy 0.3496932515337423
+    Epoch 100: Loss 0.1722538021669186, Accuracy 0.901840490797546
+    Epoch 200: Loss 0.1305345140370901, Accuracy 0.9079754601226994
+    Epoch 300: Loss 0.11370320839132773, Accuracy 0.8957055214723927
+    Epoch 400: Loss 0.10982347564770724, Accuracy 0.901840490797546
+    Epoch 500: Loss 0.10483990809689325, Accuracy 0.9263803680981595
+    Epoch 600: Loss 0.10155752634211296, Accuracy 0.9325153374233128
+    Epoch 700: Loss 0.09951830751495401, Accuracy 0.9202453987730062
+    Epoch 800: Loss 0.09799491669757483, Accuracy 0.9325153374233128
+    Epoch 900: Loss 0.09839336828285081, Accuracy 0.9263803680981595
+    
+
+
+```python
+##################################
+# Plotting the computed gradients
+# of the neural network model
+# with RRELU activation function
+##################################
+plt.figure(figsize=(10, 6))
+for key, value in nn_rrelu.gradients.items():
+    plt.plot(value, label=key)
+plt.title('RRELU Activation: Gradients by Iteration')
+plt.xlabel('Iterations')
+plt.ylabel('Gradients')
+plt.ylim(-0.05, 0.50)
+plt.xlim(-50,1000)
+plt.legend(loc="upper left")
+plt.show()
+```
+
+
+    
+![png](output_219_0.png)
+    
+
+
+
+```python
+##################################
+# Plotting the computed cost
+# of the neural network model
+# with RRELU activation function
+##################################
+plt.figure(figsize=(10, 6))
+plt.plot(nn_rrelu.losses)
+plt.title('RRELU Activation: Cost Function by Iteration')
+plt.xlabel('Iterations')
+plt.ylabel('Cost')
+plt.ylim(0.05, 0.70)
+plt.xlim(-50,1000)
+plt.show()
+```
+
+
+    
+![png](output_220_0.png)
+    
+
+
+
+```python
+##################################
+# Plotting the computed accuracy
+# of the neural network model
+# with RRELU activation function
+##################################
+plt.figure(figsize=(10, 6))
+plt.plot(nn_rrelu.accuracies)
+plt.title('RRELU Activation: Classification by Iteration')
+plt.xlabel('Iterations')
+plt.ylabel('Accuracy')
+plt.ylim(0.00, 1.00)
+plt.xlim(-50,1000)
+plt.show()
+```
+
+
+    
+![png](output_221_0.png)
+    
+
 
 ## 1.7. Consolidated Findings <a class="anchor" id="1.7"></a>
 
