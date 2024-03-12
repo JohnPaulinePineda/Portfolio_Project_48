@@ -2,7 +2,7 @@
 # Supervised Learning : Exploring Activation Functions And Backpropagation Gradient Updates for Neural Network Classification 
 
 ***
-### John Pauline Pineda <br> <br> *March 17, 2024*
+### John Pauline Pineda <br> <br> *March 12, 2024*
 ***
 
 * [**1. Table of Contents**](#TOC)
@@ -37,7 +37,7 @@
 
 # 1. Table of Contents <a class="anchor" id="TOC"></a>
 
-This project manually implements the **Backpropagation** method using various helpful packages in <mark style="background-color: #CCECFF"><b>Python</b></mark>, and evaluates a range of values for the learning rate and epoch count parameters to optimally update the weights of an artificial neural network classification model. The cost function optimization profiles of the different candidate parameter settings were compared. All results were consolidated in a [<span style="color: #FF0000"><b>Summary</b></span>](#Summary) presented at the end of the document.
+This project manually implements the **Sigmoid**, **Rectified Linear Unit**, **Leaky Rectified Linear Unit**, **Exponential Linear Unit**, **Scaled Exponential Linear Unit** and **Randomized Leaky Rectified Linear Unit** activation functions using various helpful packages in <mark style="background-color: #CCECFF"><b>Python</b></mark> with fixed values applied for the learning rate and epoch count parameters to optimally update the gradients and weights an artificial neural network classification model. The gradient, weight, cost function and classification accuracy optimization profiles of the different activation settings were compared. All results were consolidated in a [<span style="color: #FF0000"><b>Summary</b></span>](#Summary) presented at the end of the document.
 
 [Artificial Neural Network](https://link.springer.com/book/10.1007/978-0-387-84858-7), in the context of categorical response prediction, consists of interconnected nodes called neurons organized in layers. The model architecture involves an input layer which receives the input data, with each neuron representing a feature or attribute of the data; hidden layers which perform computations on the input data through weighted connections between neurons and apply activation functions to produce outputs; and the output layer which produces the final predictions equal to the number of classes, each representing the probability of the input belonging to a particular class, based on the computations performed in the hidden layers. Neurons within adjacent layers are connected by weighted connections. Each connection has an associated weight that determines the strength of influence one neuron has on another. These weights are adjusted during the training process to enable the network to learn from the input data and make accurate predictions. Activation functions introduce non-linearities into the network, allowing it to learn complex relationships between inputs and outputs. The training process involves presenting input data along with corresponding target outputs to the network and adjusting the weights to minimize the difference between the predicted outputs and the actual targets which is typically performed through optimization algorithms such as gradient descent and backpropagation. The training process iteratively updates the weights until the model's predictions closely match the target outputs.
 
@@ -5443,16 +5443,12 @@ ax.legend(loc='upper left',title='CANRAT');
 
 ```python
 ##################################
-# Formulating the individual
-# neural network components
+# Preparing the data and
+# and converting to a suitable format
+# as a neural network model input
 ##################################
 matrix_x_values = cancer_rate_premodelling.iloc[:,0:2].to_numpy()
-matrix_x_bias = np.ones((cancer_rate_premodelling.shape[0],1))
-matrix_x_complete = np.concatenate((matrix_x_values,matrix_x_bias), axis=1)
 y_values = np.where(cancer_rate_premodelling['CANRAT'] == 'High', 1, 0)
-observation_count = cancer_rate_premodelling.shape[0]
-num_obs = observation_count
-x_mat_full = matrix_x_complete
 ```
 
 ### 1.6.2 Sigmoid Activation Function <a class="anchor" id="1.6.2"></a>
@@ -6347,7 +6343,7 @@ plt.show()
 ##################################
 leakyrelu_metrics = pd.DataFrame(["ACCURACY","LOSS"])
 leakyrelu_values = pd.DataFrame([nn_leakyrelu.accuracies[-1],nn_leakyrelu.losses[-1]])
-leakyrelu_method = pd.DataFrame(["LEAKY_RELU"]*2)
+leakyrelu_method = pd.DataFrame(["Leaky_RELU"]*2)
 leakyrelu_summary = pd.concat([leakyrelu_metrics,
                                leakyrelu_values,
                                leakyrelu_method], axis=1)
@@ -6385,13 +6381,13 @@ display(leakyrelu_summary)
       <th>0</th>
       <td>ACCURACY</td>
       <td>0.926380</td>
-      <td>LEAKY_RELU</td>
+      <td>Leaky_RELU</td>
     </tr>
     <tr>
       <th>1</th>
       <td>LOSS</td>
       <td>0.093777</td>
-      <td>LEAKY_RELU</td>
+      <td>Leaky_RELU</td>
     </tr>
   </tbody>
 </table>
@@ -7341,6 +7337,15 @@ display(rrelu_summary)
 
 ## 1.7. Consolidated Findings <a class="anchor" id="1.7"></a>
 
+1. This activation function showed the presence of the vanishing gradients problem resulting to a relatively higher loss and lower classification accuracy:
+    * <span style="color: #FF0000">Sigmoid</span> = Sigmoid Activation Function
+2. These activation functions demonstrated the absence of the vanishing gradients problem resulting to a sufficiently low loss and higher classification accuracy:
+    * <span style="color: #FF0000">RELU</span> = Rectified Linear Unit Activation Function
+    * <span style="color: #FF0000">Leaky_RELU</span> = Leaky Rectified Linear Unit Activation Function
+    * <span style="color: #FF0000">ELU</span> = Exponential Linear Unit Activation Function
+    * <span style="color: #FF0000">SELU</span> = Scaled Exponential Linear Unit Activation Function
+    * <span style="color: #FF0000">RRELU</span> = Randomized Leaky Rectified Linear Unit Activation Function                 
+3. The choice of **Activation Function** can significantly impact the performance and training dynamics of a neural network classification model, making it an important consideration during model development. Different activation functions have different properties, and selecting the appropriate one depends on factors such as the nature of the problem, the characteristics of the data, and the desired behavior of the network.
 
 
 
@@ -7416,13 +7421,13 @@ display(model_performance_comparison)
       <th>4</th>
       <td>ACCURACY</td>
       <td>0.926380</td>
-      <td>LEAKY_RELU</td>
+      <td>Leaky_RELU</td>
     </tr>
     <tr>
       <th>5</th>
       <td>LOSS</td>
       <td>0.093777</td>
-      <td>LEAKY_RELU</td>
+      <td>Leaky_RELU</td>
     </tr>
     <tr>
       <th>6</th>
@@ -7520,7 +7525,7 @@ model_performance_comparison_accuracy
       <th>2</th>
       <td>ACCURACY</td>
       <td>0.926380</td>
-      <td>LEAKY_RELU</td>
+      <td>Leaky_RELU</td>
     </tr>
     <tr>
       <th>3</th>
@@ -7623,7 +7628,7 @@ model_performance_comparison_loss
       <th>2</th>
       <td>LOSS</td>
       <td>0.093777</td>
-      <td>LEAKY_RELU</td>
+      <td>Leaky_RELU</td>
     </tr>
     <tr>
       <th>3</th>
@@ -7674,7 +7679,7 @@ plt.show()
 # 2. Summary <a class="anchor" id="Summary"></a>
 
 
-
+![Project48_Summary.png](attachment:e1504554-f852-4b7b-bc85-005132bab59e.png)
 
 # 3. References <a class="anchor" id="References"></a>
 
