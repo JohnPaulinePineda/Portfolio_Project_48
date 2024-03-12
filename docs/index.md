@@ -5651,6 +5651,26 @@ ax.legend(loc='upper left',title='CANRAT');
 * **[Article]** [Backpropagation Neural Network using Python](https://medium.com/@gabriel_renno/a-step-by-step-guide-to-hypothesis-testing-in-python-using-scipy-8eb5b696ab07) by Avinash Navlani (Machine Learning Geek)
 * **[Article]** [Back Propagation in Neural Network: Machine Learning Algorithm](https://www.guru99.com/backpropogation-neural-network.html) by Daniel Johnson (Guru99)
 * **[Article]** [What is Backpropagation?](https://deepai.org/machine-learning-glossary-and-terms/backpropagation) by Thomas Wood (DeepAI.Org)
+* **[Article]** [Activation Functions in Neural Networks [12 Types & Use Cases]](https://www.v7labs.com/blog/neural-networks-activation-functions) by Pragati Baheti (V7.Com)
+* **[Article]** [Activation Functions in Neural Networks](https://towardsdatascience.com/activation-functions-neural-networks-1cbd9f8d91d6) by Sagar Sharma (Towards Data Science)
+* **[Article]** [Comparison of Sigmoid, Tanh and ReLU Activation Functions](https://www.aitude.com/comparison-of-sigmoid-tanh-and-relu-activation-functions/) by Sandeep Kumar (AItude.Com)
+* **[Article]** [How to Choose an Activation Function for Deep Learning](https://machinelearningmastery.com/choose-an-activation-function-for-deep-learning/) by Jason Brownlee (Machine Learning Mastery)
+* **[Article]** [Choosing the Right Activation Function in Deep Learning: A Practical Overview and Comparison](https://python.plainenglish.io/choosing-the-right-activation-function-in-deep-learning-a-practical-overview-and-comparison-c5372fe167f8) by Okan Yenigün (Medium)
+* **[Article]** [Activation Functions in Neural Networks](https://www.geeksforgeeks.org/activation-functions-neural-networks/) by Geeks For Geeks Team
+* **[Article]** [A Practical Comparison of Activation Functions](https://becominghuman.ai/a-practical-comparison-of-activation-functions-6f348be7d274) by Danny Denenberg (Medium)
+* **[Article]** [Activation Functions in Neural Networks: With 15 examples](https://encord.com/blog/activation-functions-neural-networks/) by Nikolaj Buhl (Encord.Com)
+* **[Article]** [Activation functions used in Neural Networks - Which is Better?](https://anishsinghwalia.medium.com/activation-functions-used-in-neural-networks-which-is-better-d4817d91199a) by Anish Singh Walia (Medium)
+* **[Article]** [6 Types of Activation Function in Neural Networks You Need to Know](https://www.upgrad.com/blog/types-of-activation-function-in-neural-networks/) by Kechit Goyal (UpGrad.Com)
+* **[Article]** [Activation Functions in Neural Networks](https://www.superannotate.com/blog/activation-functions-in-neural-networks) by SuperAnnotate Team
+* **[Article]** [Compare Activation Layers](https://www.mathworks.com/help/deeplearning/ug/compare-activation-layers.html) by MathWorks Team
+* **[Article]** [Activation Functions In Neural Networks](https://www.comet.com/site/blog/activation-functions-in-neural-networks/) by Kurtis Pykes (Comet.Com)
+* **[Article]** [ReLU vs. Sigmoid Function in Deep Neural Networks](https://wandb.ai/ayush-thakur/dl-question-bank/reports/ReLU-vs-Sigmoid-Function-in-Deep-Neural-Networks--VmlldzoyMDk0MzI) by Ayush Thakur (Wanb.AI)
+* **[Article]** [Using Activation Functions in Neural Networks](https://machinelearningmastery.com/using-activation-functions-in-neural-networks/) by Jason Bronwlee (Machine Learning Mastery)
+* **[Article]** [Activation Function: Top 9 Most Popular Explained & When To Use Them](https://spotintelligence.com/2023/06/16/activation-function/) by Neri Van Otten (SpotIntelligence.Com)
+* **[Article]** [5 Deep Learning and Neural Network Activation Functions to Know](https://builtin.com/machine-learning/activation-functions-deep-learning) by Artem Oppermann (BuiltIn.Com)
+* **[Article]** [Activation Functions in Deep Learning: Sigmoid, tanh, ReLU](https://artemoppermann.com/activation-functions-in-deep-learning-sigmoid-tanh-relu/) by Artem Oppermann
+* **[Article]** [7 Types of Activation Functions in Neural Network](https://www.analyticssteps.com/blogs/7-types-activation-functions-neural-network) by Dinesh Kumawat (AnalyticsSteps.Com)
+* **[Article]** [What is an Activation Function? A Complete Guide](https://www.google.com) by Petru Potrimba (RoboFlow.Com)
 * **[Publication]** [Data Quality for Machine Learning Tasks](https://journals.sagepub.com/doi/10.1177/0962280206074463) by Nitin Gupta, Shashank Mujumdar, Hima Patel, Satoshi Masuda, Naveen Panwar, Sambaran Bandyopadhyay, Sameep Mehta, Shanmukha Guttula, Shazia Afzal, Ruhi Sharma Mittal and Vitobha Munigala (KDD ’21: Proceedings of the 27th ACM SIGKDD Conference on Knowledge Discovery & Data Mining)
 * **[Publication]** [Overview and Importance of Data Quality for Machine Learning Tasks](https://dl.acm.org/doi/10.1145/3394486.3406477) by Abhinav Jain, Hima Patel, Lokesh Nagalapatti, Nitin Gupta, Sameep Mehta, Shanmukha Guttula, Shashank Mujumdar, Shazia Afzal, Ruhi Sharma Mittal and Vitobha Munigala (KDD ’20: Proceedings of the 26th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining)
 * **[Publication]** [Multiple Imputation of Discrete and Continuous Data by Fully Conditional Specification](https://journals.sagepub.com/doi/10.1177/0962280206074463) by Stef van Buuren (Statistical Methods in Medical Research)
