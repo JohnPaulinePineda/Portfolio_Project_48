@@ -7101,7 +7101,7 @@ class NeuralNetwork_RRELU:
         hidden1_error = np.dot(hidden2_delta, self.weights2.T)
         hidden1_delta = hidden1_error * (self.hidden1 > 0) + 0.01 * hidden1_error * (self.hidden1 <= 0)
         
-        # Update weights and biases based on computed gradients
+        # Updating weights and biases based on computed gradients
         self.weights4 -= lr * np.dot(self.hidden3.T, output_delta)
         self.bias4 -= lr * np.sum(output_delta, axis=0, keepdims=True)
         
@@ -7683,6 +7683,8 @@ plt.show()
 
 # 3. References <a class="anchor" id="References"></a>
 
+* **[Book]** [Deep Learning: A Visual Approach](https://nostarch.com/deep-learning-visual-approach) by Andrew Glassner
+* **[Book]** [Deep Learning with Python](https://www.manning.com/books/deep-learning-with-python-second-edition) by François Chollet
 * **[Book]** [The Elements of Statistical Learning](https://link.springer.com/book/10.1007/978-0-387-84858-7) by Trevor Hastie, Robert Tibshirani and Jerome Friedman
 * **[Book]** [Data Preparation for Machine Learning: Data Cleaning, Feature Selection, and Data Transforms in Python](https://machinelearningmastery.com/data-preparation-for-machine-learning/) by Jason Brownlee
 * **[Book]** [Feature Engineering and Selection: A Practical Approach for Predictive Models](http://www.feat.engineering/) by Max Kuhn and Kjell Johnson
@@ -7773,7 +7775,7 @@ plt.show()
 * **[Article]** [5 Deep Learning and Neural Network Activation Functions to Know](https://builtin.com/machine-learning/activation-functions-deep-learning) by Artem Oppermann (BuiltIn.Com)
 * **[Article]** [Activation Functions in Deep Learning: Sigmoid, tanh, ReLU](https://artemoppermann.com/activation-functions-in-deep-learning-sigmoid-tanh-relu/) by Artem Oppermann
 * **[Article]** [7 Types of Activation Functions in Neural Network](https://www.analyticssteps.com/blogs/7-types-activation-functions-neural-network) by Dinesh Kumawat (AnalyticsSteps.Com)
-* **[Article]** [What is an Activation Function? A Complete Guide](https://www.google.com) by Petru Potrimba (RoboFlow.Com)
+* **[Article]** [What is an Activation Function? A Complete Guide](https://blog.roboflow.com/activation-function-computer-vision/#:~:text=Petru%20Potrimba,of%20deep%20learning%20model%20outputs.) by Petru Potrimba (RoboFlow.Com)
 * **[Publication]** [Data Quality for Machine Learning Tasks](https://journals.sagepub.com/doi/10.1177/0962280206074463) by Nitin Gupta, Shashank Mujumdar, Hima Patel, Satoshi Masuda, Naveen Panwar, Sambaran Bandyopadhyay, Sameep Mehta, Shanmukha Guttula, Shazia Afzal, Ruhi Sharma Mittal and Vitobha Munigala (KDD ’21: Proceedings of the 27th ACM SIGKDD Conference on Knowledge Discovery & Data Mining)
 * **[Publication]** [Overview and Importance of Data Quality for Machine Learning Tasks](https://dl.acm.org/doi/10.1145/3394486.3406477) by Abhinav Jain, Hima Patel, Lokesh Nagalapatti, Nitin Gupta, Sameep Mehta, Shanmukha Guttula, Shashank Mujumdar, Shazia Afzal, Ruhi Sharma Mittal and Vitobha Munigala (KDD ’20: Proceedings of the 26th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining)
 * **[Publication]** [Multiple Imputation of Discrete and Continuous Data by Fully Conditional Specification](https://journals.sagepub.com/doi/10.1177/0962280206074463) by Stef van Buuren (Statistical Methods in Medical Research)
@@ -7782,6 +7784,7 @@ plt.show()
 * **[Course]** [IBM Data Analyst Professional Certificate](https://www.coursera.org/professional-certificates/ibm-data-analyst) by IBM Team (Coursera)
 * **[Course]** [IBM Data Science Professional Certificate](https://www.coursera.org/professional-certificates/ibm-data-science) by IBM Team (Coursera)
 * **[Course]** [IBM Machine Learning Professional Certificate](https://www.coursera.org/professional-certificates/ibm-machine-learning) by IBM Team (Coursera)
+* **[Course]** [Machine Learning Specialization Certificate](https://www.coursera.org/specializations/machine-learning-introduction) by DeepLearning.AI Team (Coursera)
 
 ***
 
