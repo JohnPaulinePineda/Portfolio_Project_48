@@ -2,7 +2,7 @@
 # Supervised Learning : Exploring Activation Functions And Backpropagation Gradient Updates for Neural Network Classification 
 
 ***
-### John Pauline Pineda <br> <br> *March 12, 2024*
+### [**John Pauline Pineda**](https://github.com/JohnPaulinePineda) <br> <br> *March 12, 2024*
 ***
 
 * [**1. Table of Contents**](#TOC)
@@ -133,6 +133,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import itertools
+import os
 %matplotlib inline
 
 from operator import add,mul,truediv
@@ -147,9 +148,18 @@ from scipy import stats
 
 ```python
 ##################################
-# Loading the dataset
+# Defining file paths
 ##################################
-cancer_rate = pd.read_csv('CategoricalCancerRates.csv')
+DATASETS_ORIGINAL_PATH = r"datasets\original"
+```
+
+
+```python
+##################################
+# Loading the dataset
+# from the DATASETS_ORIGINAL_PATH
+##################################
+cancer_rate = pd.read_csv(os.path.join("..", DATASETS_ORIGINAL_PATH, "CategoricalCancerRates.csv"))
 ```
 
 
@@ -821,7 +831,7 @@ cancer_rate.duplicated().sum()
 
 
 
-    0
+    np.int64(0)
 
 
 
@@ -1215,15 +1225,6 @@ display(all_column_quality_summary[(all_column_quality_summary['Fill.Rate']<1)].
       <td>0.864407</td>
     </tr>
     <tr>
-      <th>2</th>
-      <td>GDPPER</td>
-      <td>float64</td>
-      <td>177</td>
-      <td>165</td>
-      <td>12</td>
-      <td>0.932203</td>
-    </tr>
-    <tr>
       <th>21</th>
       <td>EPISCO</td>
       <td>float64</td>
@@ -1233,13 +1234,13 @@ display(all_column_quality_summary[(all_column_quality_summary['Fill.Rate']<1)].
       <td>0.932203</td>
     </tr>
     <tr>
-      <th>20</th>
-      <td>HDICAT</td>
-      <td>category</td>
+      <th>2</th>
+      <td>GDPPER</td>
+      <td>float64</td>
       <td>177</td>
-      <td>167</td>
-      <td>10</td>
-      <td>0.943503</td>
+      <td>165</td>
+      <td>12</td>
+      <td>0.932203</td>
     </tr>
     <tr>
       <th>16</th>
@@ -1251,8 +1252,17 @@ display(all_column_quality_summary[(all_column_quality_summary['Fill.Rate']<1)].
       <td>0.943503</td>
     </tr>
     <tr>
-      <th>9</th>
-      <td>DTHCMD</td>
+      <th>20</th>
+      <td>HDICAT</td>
+      <td>category</td>
+      <td>177</td>
+      <td>167</td>
+      <td>10</td>
+      <td>0.943503</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>CO2EMI</td>
       <td>float64</td>
       <td>177</td>
       <td>170</td>
@@ -1269,8 +1279,17 @@ display(all_column_quality_summary[(all_column_quality_summary['Fill.Rate']<1)].
       <td>0.960452</td>
     </tr>
     <tr>
-      <th>15</th>
-      <td>CO2EMI</td>
+      <th>11</th>
+      <td>GHGEMI</td>
+      <td>float64</td>
+      <td>177</td>
+      <td>170</td>
+      <td>7</td>
+      <td>0.960452</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>DTHCMD</td>
       <td>float64</td>
       <td>177</td>
       <td>170</td>
@@ -1287,15 +1306,6 @@ display(all_column_quality_summary[(all_column_quality_summary['Fill.Rate']<1)].
       <td>0.960452</td>
     </tr>
     <tr>
-      <th>11</th>
-      <td>GHGEMI</td>
-      <td>float64</td>
-      <td>177</td>
-      <td>170</td>
-      <td>7</td>
-      <td>0.960452</td>
-    </tr>
-    <tr>
       <th>14</th>
       <td>FORARE</td>
       <td>float64</td>
@@ -1305,35 +1315,8 @@ display(all_column_quality_summary[(all_column_quality_summary['Fill.Rate']<1)].
       <td>0.977401</td>
     </tr>
     <tr>
-      <th>8</th>
-      <td>TUBINC</td>
-      <td>float64</td>
-      <td>177</td>
-      <td>174</td>
-      <td>3</td>
-      <td>0.983051</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>AGRLND</td>
-      <td>float64</td>
-      <td>177</td>
-      <td>174</td>
-      <td>3</td>
-      <td>0.983051</td>
-    </tr>
-    <tr>
       <th>6</th>
       <td>POPGRO</td>
-      <td>float64</td>
-      <td>177</td>
-      <td>174</td>
-      <td>3</td>
-      <td>0.983051</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <td>POPDEN</td>
       <td>float64</td>
       <td>177</td>
       <td>174</td>
@@ -1350,8 +1333,35 @@ display(all_column_quality_summary[(all_column_quality_summary['Fill.Rate']<1)].
       <td>0.983051</td>
     </tr>
     <tr>
+      <th>17</th>
+      <td>POPDEN</td>
+      <td>float64</td>
+      <td>177</td>
+      <td>174</td>
+      <td>3</td>
+      <td>0.983051</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>AGRLND</td>
+      <td>float64</td>
+      <td>177</td>
+      <td>174</td>
+      <td>3</td>
+      <td>0.983051</td>
+    </tr>
+    <tr>
       <th>7</th>
       <td>LIFEXP</td>
+      <td>float64</td>
+      <td>177</td>
+      <td>174</td>
+      <td>3</td>
+      <td>0.983051</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>TUBINC</td>
       <td>float64</td>
       <td>177</td>
       <td>174</td>
@@ -1663,13 +1673,6 @@ display(all_row_quality_summary[(all_row_quality_summary['Missing.Rate']>0.20)].
       <td>0.272727</td>
     </tr>
     <tr>
-      <th>132</th>
-      <td>Somalia</td>
-      <td>22</td>
-      <td>6</td>
-      <td>0.272727</td>
-    </tr>
-    <tr>
       <th>168</th>
       <td>South Sudan</td>
       <td>22</td>
@@ -1677,15 +1680,22 @@ display(all_row_quality_summary[(all_row_quality_summary['Missing.Rate']>0.20)].
       <td>0.272727</td>
     </tr>
     <tr>
-      <th>73</th>
-      <td>Venezuela</td>
+      <th>132</th>
+      <td>Somalia</td>
+      <td>22</td>
+      <td>6</td>
+      <td>0.272727</td>
+    </tr>
+    <tr>
+      <th>117</th>
+      <td>Libya</td>
       <td>22</td>
       <td>5</td>
       <td>0.227273</td>
     </tr>
     <tr>
-      <th>117</th>
-      <td>Libya</td>
+      <th>73</th>
+      <td>Venezuela</td>
       <td>22</td>
       <td>5</td>
       <td>0.227273</td>
@@ -1918,7 +1928,7 @@ display(numeric_column_quality_summary)
       <td>34024.900890</td>
       <td>2.346469e+05</td>
       <td>98380.636010</td>
-      <td>42154.178100</td>
+      <td>77541.764380</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -1936,7 +1946,7 @@ display(numeric_column_quality_summary)
       <td>61.701500</td>
       <td>1.000000e+02</td>
       <td>100.000000</td>
-      <td>52.516000</td>
+      <td>86.699000</td>
       <td>2</td>
       <td>1</td>
       <td>2.000000</td>
@@ -1972,7 +1982,7 @@ display(numeric_column_quality_summary)
       <td>0.873660</td>
       <td>5.354510e+00</td>
       <td>1.232440</td>
-      <td>0.962180</td>
+      <td>3.422870</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -1990,7 +2000,7 @@ display(numeric_column_quality_summary)
       <td>1.179959</td>
       <td>3.727101e+00</td>
       <td>1.235701</td>
-      <td>1.483129</td>
+      <td>2.204789</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2008,7 +2018,7 @@ display(numeric_column_quality_summary)
       <td>72.464610</td>
       <td>8.456000e+01</td>
       <td>83.200000</td>
-      <td>68.687000</td>
+      <td>82.256098</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2026,7 +2036,7 @@ display(numeric_column_quality_summary)
       <td>44.500000</td>
       <td>5.920000e+02</td>
       <td>12.000000</td>
-      <td>7.200000</td>
+      <td>4.100000</td>
       <td>4</td>
       <td>3</td>
       <td>1.333333</td>
@@ -2044,7 +2054,7 @@ display(numeric_column_quality_summary)
       <td>12.456279</td>
       <td>6.520789e+01</td>
       <td>4.941054</td>
-      <td>42.079403</td>
+      <td>4.354730</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2062,7 +2072,7 @@ display(numeric_column_quality_summary)
       <td>40.386649</td>
       <td>8.084112e+01</td>
       <td>46.252480</td>
-      <td>72.006469</td>
+      <td>38.562911</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2080,7 +2090,7 @@ display(numeric_column_quality_summary)
       <td>41009.275980</td>
       <td>1.294287e+07</td>
       <td>571903.119900</td>
-      <td>3000.932259</td>
+      <td>80158.025830</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2098,7 +2108,7 @@ display(numeric_column_quality_summary)
       <td>32.381668</td>
       <td>1.000000e+02</td>
       <td>100.000000</td>
-      <td>13.637841</td>
+      <td>80.081439</td>
       <td>3</td>
       <td>1</td>
       <td>3.000000</td>
@@ -2116,7 +2126,7 @@ display(numeric_column_quality_summary)
       <td>11118.976025</td>
       <td>1.186285e+06</td>
       <td>131484.763200</td>
-      <td>1326.034028</td>
+      <td>32241.937000</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2134,7 +2144,7 @@ display(numeric_column_quality_summary)
       <td>31.509048</td>
       <td>9.741212e+01</td>
       <td>17.421315</td>
-      <td>8.782159</td>
+      <td>37.570126</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2152,7 +2162,7 @@ display(numeric_column_quality_summary)
       <td>2.298368</td>
       <td>3.172684e+01</td>
       <td>14.772658</td>
-      <td>0.972088</td>
+      <td>6.160799</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2188,7 +2198,7 @@ display(numeric_column_quality_summary)
       <td>77.983133</td>
       <td>7.918951e+03</td>
       <td>3.335312</td>
-      <td>13.300785</td>
+      <td>19.331586</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2206,7 +2216,7 @@ display(numeric_column_quality_summary)
       <td>53.392460</td>
       <td>1.433107e+02</td>
       <td>110.139221</td>
-      <td>45.220661</td>
+      <td>75.734833</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2224,7 +2234,7 @@ display(numeric_column_quality_summary)
       <td>5348.192875</td>
       <td>1.173705e+05</td>
       <td>51722.069000</td>
-      <td>3961.726633</td>
+      <td>41760.594780</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2428,7 +2438,7 @@ display(numeric_column_quality_summary[(numeric_column_quality_summary['Skewness
       <td>77.983133</td>
       <td>7.918951e+03</td>
       <td>3.335312</td>
-      <td>13.300785</td>
+      <td>19.331586</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2446,7 +2456,7 @@ display(numeric_column_quality_summary[(numeric_column_quality_summary['Skewness
       <td>41009.275980</td>
       <td>1.294287e+07</td>
       <td>571903.119900</td>
-      <td>3000.932259</td>
+      <td>80158.025830</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2482,7 +2492,7 @@ display(numeric_column_quality_summary[(numeric_column_quality_summary['Skewness
       <td>11118.976025</td>
       <td>1.186285e+06</td>
       <td>131484.763200</td>
-      <td>1326.034028</td>
+      <td>32241.937000</td>
       <td>1</td>
       <td>1</td>
       <td>1.000000</td>
@@ -2654,7 +2664,7 @@ display(object_column_quality_summary)
       <th>0</th>
       <td>COUNTRY</td>
       <td>Australia</td>
-      <td>Mauritius</td>
+      <td>New Zealand</td>
       <td>1</td>
       <td>1</td>
       <td>1.0</td>
@@ -3596,7 +3606,7 @@ cancer_rate_cleaned_categorical = cancer_rate_cleaned.select_dtypes(include='cat
 # for categorical columns with
 # the most frequent category
 ##################################
-cancer_rate_cleaned_categorical['HDICAT'].fillna(cancer_rate_cleaned_categorical['HDICAT'].mode()[0], inplace=True)
+cancer_rate_cleaned_categorical['HDICAT'] = cancer_rate_cleaned_categorical['HDICAT'].fillna(cancer_rate_cleaned_categorical['HDICAT'].mode()[0])
 cancer_rate_imputed_categorical = cancer_rate_cleaned_categorical.reset_index(drop=True)
 ```
 
@@ -4123,91 +4133,91 @@ for column in cancer_rate_imputed_numeric:
 
 
     
-![png](output_121_0.png)
+![png](output_122_0.png)
     
 
 
 
     
-![png](output_121_1.png)
+![png](output_122_1.png)
     
 
 
 
     
-![png](output_121_2.png)
+![png](output_122_2.png)
     
 
 
 
     
-![png](output_121_3.png)
+![png](output_122_3.png)
     
 
 
 
     
-![png](output_121_4.png)
+![png](output_122_4.png)
     
 
 
 
     
-![png](output_121_5.png)
+![png](output_122_5.png)
     
 
 
 
     
-![png](output_121_6.png)
+![png](output_122_6.png)
     
 
 
 
     
-![png](output_121_7.png)
+![png](output_122_7.png)
     
 
 
 
     
-![png](output_121_8.png)
+![png](output_122_8.png)
     
 
 
 
     
-![png](output_121_9.png)
+![png](output_122_9.png)
     
 
 
 
     
-![png](output_121_10.png)
+![png](output_122_10.png)
     
 
 
 
     
-![png](output_121_11.png)
+![png](output_122_11.png)
     
 
 
 
     
-![png](output_121_12.png)
+![png](output_122_12.png)
     
 
 
 
     
-![png](output_121_13.png)
+![png](output_122_13.png)
     
 
 
 
     
-![png](output_121_14.png)
+![png](output_122_14.png)
     
 
 
@@ -4439,7 +4449,7 @@ plt.show()
 
 
     
-![png](output_126_0.png)
+![png](output_127_0.png)
     
 
 
@@ -4476,7 +4486,7 @@ plot_correlation_matrix(cancer_rate_imputed_numeric_correlation,mask)
 
 
     
-![png](output_128_0.png)
+![png](output_129_0.png)
     
 
 
@@ -4573,79 +4583,79 @@ for column in cancer_rate_transformed_numeric:
 
 
     
-![png](output_134_0.png)
+![png](output_135_0.png)
     
 
 
 
     
-![png](output_134_1.png)
+![png](output_135_1.png)
     
 
 
 
     
-![png](output_134_2.png)
+![png](output_135_2.png)
     
 
 
 
     
-![png](output_134_3.png)
+![png](output_135_3.png)
     
 
 
 
     
-![png](output_134_4.png)
+![png](output_135_4.png)
     
 
 
 
     
-![png](output_134_5.png)
+![png](output_135_5.png)
     
 
 
 
     
-![png](output_134_6.png)
+![png](output_135_6.png)
     
 
 
 
     
-![png](output_134_7.png)
+![png](output_135_7.png)
     
 
 
 
     
-![png](output_134_8.png)
+![png](output_135_8.png)
     
 
 
 
     
-![png](output_134_9.png)
+![png](output_135_9.png)
     
 
 
 
     
-![png](output_134_10.png)
+![png](output_135_10.png)
     
 
 
 
     
-![png](output_134_11.png)
+![png](output_135_11.png)
     
 
 
 
     
-![png](output_134_12.png)
+![png](output_135_12.png)
     
 
 
@@ -4735,73 +4745,73 @@ for column in cancer_rate_scaled_numeric:
 
 
     
-![png](output_140_0.png)
+![png](output_141_0.png)
     
 
 
 
     
-![png](output_140_1.png)
+![png](output_141_1.png)
     
 
 
 
     
-![png](output_140_2.png)
+![png](output_141_2.png)
     
 
 
 
     
-![png](output_140_3.png)
+![png](output_141_3.png)
     
 
 
 
     
-![png](output_140_4.png)
+![png](output_141_4.png)
     
 
 
 
     
-![png](output_140_5.png)
+![png](output_141_5.png)
     
 
 
 
     
-![png](output_140_6.png)
+![png](output_141_6.png)
     
 
 
 
     
-![png](output_140_7.png)
+![png](output_141_7.png)
     
 
 
 
     
-![png](output_140_8.png)
+![png](output_141_8.png)
     
 
 
 
     
-![png](output_140_9.png)
+![png](output_141_9.png)
     
 
 
 
     
-![png](output_140_10.png)
+![png](output_141_10.png)
     
 
 
 
     
-![png](output_140_11.png)
+![png](output_141_11.png)
     
 
 
@@ -4964,7 +4974,7 @@ axes = axes.ravel()
 ##################################
 for i, x_variable in enumerate(x_variables):
     ax = axes[i]
-    ax.boxplot([group[x_variable] for name, group in cancer_rate_preprocessed_combined.groupby(y_variable)])
+    ax.boxplot([group[x_variable] for name, group in cancer_rate_preprocessed_combined.groupby(y_variable, observed=True)])
     ax.set_title(f'{y_variable} Versus {x_variable}')
     ax.set_xlabel(y_variable)
     ax.set_ylabel(x_variable)
@@ -4983,7 +4993,7 @@ plt.show()
 
 
     
-![png](output_152_0.png)
+![png](output_153_0.png)
     
 
 
@@ -5020,7 +5030,7 @@ axes = axes.ravel()
 ##################################
 for i, y_variable in enumerate(y_variables):
     ax = axes[i]
-    category_counts = cancer_rate_preprocessed_categorical_combined.groupby([x_variable, y_variable]).size().unstack(fill_value=0)
+    category_counts = cancer_rate_preprocessed_categorical_combined.groupby([x_variable, y_variable], observed=True).size().unstack(fill_value=0)
     category_proportions = category_counts.div(category_counts.sum(axis=1), axis=0)
     category_proportions.plot(kind='bar', stacked=True, ax=ax)
     ax.set_title(f'{x_variable} Versus {y_variable}')
@@ -5040,7 +5050,7 @@ plt.show()
 
 
     
-![png](output_153_0.png)
+![png](output_154_0.png)
     
 
 
@@ -5436,7 +5446,7 @@ ax.legend(loc='upper left',title='CANRAT');
 
 
     
-![png](output_166_0.png)
+![png](output_167_0.png)
     
 
 
@@ -5625,12 +5635,12 @@ nn_sigmoid.train(X, y_one_hot, epochs=1001, lr=0.01)
     Epoch 0: Loss 0.316009360251368, Accuracy 0.7484662576687117
     Epoch 100: Loss 0.29042169855505795, Accuracy 0.7484662576687117
     Epoch 200: Loss 0.28610782259171613, Accuracy 0.7484662576687117
-    Epoch 300: Loss 0.28461132823164115, Accuracy 0.7484662576687117
+    Epoch 300: Loss 0.2846113282316412, Accuracy 0.7484662576687117
     Epoch 400: Loss 0.2835652925120681, Accuracy 0.7484662576687117
     Epoch 500: Loss 0.2826104420839403, Accuracy 0.7484662576687117
     Epoch 600: Loss 0.281684171341873, Accuracy 0.7484662576687117
     Epoch 700: Loss 0.28077152406724765, Accuracy 0.7484662576687117
-    Epoch 800: Loss 0.27986564301503736, Accuracy 0.7484662576687117
+    Epoch 800: Loss 0.2798656430150373, Accuracy 0.7484662576687117
     Epoch 900: Loss 0.2789612062764938, Accuracy 0.7484662576687117
     Epoch 1000: Loss 0.27805328141665736, Accuracy 0.7484662576687117
     
@@ -5656,7 +5666,7 @@ plt.show()
 
 
     
-![png](output_174_0.png)
+![png](output_175_0.png)
     
 
 
@@ -5679,7 +5689,7 @@ plt.show()
 
 
     
-![png](output_175_0.png)
+![png](output_176_0.png)
     
 
 
@@ -5702,7 +5712,7 @@ plt.show()
 
 
     
-![png](output_176_0.png)
+![png](output_177_0.png)
     
 
 
@@ -5938,15 +5948,15 @@ nn_relu.train(X, y_one_hot, epochs=1001, lr=0.01)
 ```
 
     Epoch 0: Loss 0.3700211712894535, Accuracy 0.2822085889570552
-    Epoch 100: Loss 0.17942495875926143, Accuracy 0.901840490797546
-    Epoch 200: Loss 0.13224275039852634, Accuracy 0.9079754601226994
+    Epoch 100: Loss 0.17942495875926145, Accuracy 0.901840490797546
+    Epoch 200: Loss 0.13224275039852637, Accuracy 0.9079754601226994
     Epoch 300: Loss 0.11676788805888334, Accuracy 0.9141104294478528
     Epoch 400: Loss 0.10890482140743656, Accuracy 0.9202453987730062
-    Epoch 500: Loss 0.10455617528678202, Accuracy 0.9202453987730062
-    Epoch 600: Loss 0.10189142339749102, Accuracy 0.9202453987730062
+    Epoch 500: Loss 0.10455617528678197, Accuracy 0.9202453987730062
+    Epoch 600: Loss 0.10189142339749103, Accuracy 0.9202453987730062
     Epoch 700: Loss 0.09987241742776296, Accuracy 0.9263803680981595
     Epoch 800: Loss 0.09805768178547355, Accuracy 0.9325153374233128
-    Epoch 900: Loss 0.09697282986650115, Accuracy 0.9325153374233128
+    Epoch 900: Loss 0.09697282986650113, Accuracy 0.9325153374233128
     Epoch 1000: Loss 0.0962368489065675, Accuracy 0.9325153374233128
     
 
@@ -5971,7 +5981,7 @@ plt.show()
 
 
     
-![png](output_184_0.png)
+![png](output_185_0.png)
     
 
 
@@ -5994,7 +6004,7 @@ plt.show()
 
 
     
-![png](output_185_0.png)
+![png](output_186_0.png)
     
 
 
@@ -6017,7 +6027,7 @@ plt.show()
 
 
     
-![png](output_186_0.png)
+![png](output_187_0.png)
     
 
 
@@ -6253,12 +6263,12 @@ nn_leakyrelu.train(X, y_one_hot, epochs=1001, lr=0.01)
     Epoch 0: Loss 0.5521727210322692, Accuracy 0.3803680981595092
     Epoch 100: Loss 0.15843767165873718, Accuracy 0.9079754601226994
     Epoch 200: Loss 0.12183916598907374, Accuracy 0.901840490797546
-    Epoch 300: Loss 0.11001101254184706, Accuracy 0.9263803680981595
-    Epoch 400: Loss 0.1040206858711254, Accuracy 0.9263803680981595
-    Epoch 500: Loss 0.10064359626697071, Accuracy 0.9263803680981595
+    Epoch 300: Loss 0.11001101254184709, Accuracy 0.9263803680981595
+    Epoch 400: Loss 0.10402068587112542, Accuracy 0.9263803680981595
+    Epoch 500: Loss 0.10064359626697073, Accuracy 0.9263803680981595
     Epoch 600: Loss 0.09839877372876209, Accuracy 0.9325153374233128
-    Epoch 700: Loss 0.09675845212053225, Accuracy 0.9325153374233128
-    Epoch 800: Loss 0.09550172181604447, Accuracy 0.9263803680981595
+    Epoch 700: Loss 0.09675845212053226, Accuracy 0.9325153374233128
+    Epoch 800: Loss 0.09550172181604445, Accuracy 0.9263803680981595
     Epoch 900: Loss 0.09454243365295599, Accuracy 0.9263803680981595
     Epoch 1000: Loss 0.09377715998492316, Accuracy 0.9263803680981595
     
@@ -6284,7 +6294,7 @@ plt.show()
 
 
     
-![png](output_194_0.png)
+![png](output_195_0.png)
     
 
 
@@ -6307,7 +6317,7 @@ plt.show()
 
 
     
-![png](output_195_0.png)
+![png](output_196_0.png)
     
 
 
@@ -6330,7 +6340,7 @@ plt.show()
 
 
     
-![png](output_196_0.png)
+![png](output_197_0.png)
     
 
 
@@ -6564,13 +6574,13 @@ nn_elu.train(X, y_one_hot, epochs=1001, lr=0.01)
 ```
 
     Epoch 0: Loss 0.6239532743548977, Accuracy 0.6748466257668712
-    Epoch 100: Loss 0.18559850810160436, Accuracy 0.7852760736196319
-    Epoch 200: Loss 0.15591484175735912, Accuracy 0.8711656441717791
-    Epoch 300: Loss 0.13187741248142656, Accuracy 0.901840490797546
-    Epoch 400: Loss 0.11492254996431342, Accuracy 0.9141104294478528
-    Epoch 500: Loss 0.10509129045149063, Accuracy 0.9263803680981595
-    Epoch 600: Loss 0.10021355309897714, Accuracy 0.9263803680981595
-    Epoch 700: Loss 0.0977143414467875, Accuracy 0.9263803680981595
+    Epoch 100: Loss 0.18559850810160425, Accuracy 0.7852760736196319
+    Epoch 200: Loss 0.155914841757359, Accuracy 0.8711656441717791
+    Epoch 300: Loss 0.13187741248142648, Accuracy 0.901840490797546
+    Epoch 400: Loss 0.11492254996431339, Accuracy 0.9141104294478528
+    Epoch 500: Loss 0.10509129045149054, Accuracy 0.9263803680981595
+    Epoch 600: Loss 0.1002135530989771, Accuracy 0.9263803680981595
+    Epoch 700: Loss 0.09771434144678748, Accuracy 0.9263803680981595
     Epoch 800: Loss 0.09611887321358306, Accuracy 0.9263803680981595
     Epoch 900: Loss 0.0950962862639301, Accuracy 0.9263803680981595
     Epoch 1000: Loss 0.09443192186232496, Accuracy 0.9263803680981595
@@ -6597,7 +6607,7 @@ plt.show()
 
 
     
-![png](output_204_0.png)
+![png](output_205_0.png)
     
 
 
@@ -6620,7 +6630,7 @@ plt.show()
 
 
     
-![png](output_205_0.png)
+![png](output_206_0.png)
     
 
 
@@ -6643,7 +6653,7 @@ plt.show()
 
 
     
-![png](output_206_0.png)
+![png](output_207_0.png)
     
 
 
@@ -6877,15 +6887,15 @@ nn_selu = NeuralNetwork_SELU(input_size, hidden_size1, hidden_size2, hidden_size
 nn_selu.train(X, y_one_hot, epochs=1001, lr=0.01)
 ```
 
-    Epoch 0: Loss 1.0981323160350684, Accuracy 0.3006134969325153
-    Epoch 100: Loss 0.19448595679954012, Accuracy 0.8343558282208589
+    Epoch 0: Loss 1.0981323160350687, Accuracy 0.3006134969325153
+    Epoch 100: Loss 0.1944859567995401, Accuracy 0.8343558282208589
     Epoch 200: Loss 0.15078198879619664, Accuracy 0.8773006134969326
     Epoch 300: Loss 0.13087303505062367, Accuracy 0.8773006134969326
     Epoch 400: Loss 0.11912606258714767, Accuracy 0.8773006134969326
-    Epoch 500: Loss 0.11149519060605417, Accuracy 0.8895705521472392
-    Epoch 600: Loss 0.10641661771976163, Accuracy 0.901840490797546
+    Epoch 500: Loss 0.11149519060605416, Accuracy 0.8895705521472392
+    Epoch 600: Loss 0.10641661771976164, Accuracy 0.901840490797546
     Epoch 700: Loss 0.10280038529399513, Accuracy 0.901840490797546
-    Epoch 800: Loss 0.10017443966015953, Accuracy 0.901840490797546
+    Epoch 800: Loss 0.1001744396601595, Accuracy 0.901840490797546
     Epoch 900: Loss 0.09822970379617403, Accuracy 0.8957055214723927
     Epoch 1000: Loss 0.09674886443517218, Accuracy 0.901840490797546
     
@@ -6911,7 +6921,7 @@ plt.show()
 
 
     
-![png](output_214_0.png)
+![png](output_215_0.png)
     
 
 
@@ -6934,7 +6944,7 @@ plt.show()
 
 
     
-![png](output_215_0.png)
+![png](output_216_0.png)
     
 
 
@@ -6957,7 +6967,7 @@ plt.show()
 
 
     
-![png](output_216_0.png)
+![png](output_217_0.png)
     
 
 
@@ -7193,13 +7203,13 @@ nn_rrelu.train(X, y_one_hot, epochs=1001, lr=0.01)
 
     Epoch 0: Loss 0.425362770010686, Accuracy 0.3496932515337423
     Epoch 100: Loss 0.1722538021669186, Accuracy 0.901840490797546
-    Epoch 200: Loss 0.1305345140370901, Accuracy 0.9079754601226994
+    Epoch 200: Loss 0.13053451403709015, Accuracy 0.9079754601226994
     Epoch 300: Loss 0.11370320839132773, Accuracy 0.8957055214723927
-    Epoch 400: Loss 0.10982347564770724, Accuracy 0.901840490797546
+    Epoch 400: Loss 0.10982347564770722, Accuracy 0.901840490797546
     Epoch 500: Loss 0.10483990809689325, Accuracy 0.9263803680981595
-    Epoch 600: Loss 0.10155752634211296, Accuracy 0.9325153374233128
-    Epoch 700: Loss 0.09951830751495401, Accuracy 0.9202453987730062
-    Epoch 800: Loss 0.09799491669757483, Accuracy 0.9325153374233128
+    Epoch 600: Loss 0.10155752634211294, Accuracy 0.9325153374233128
+    Epoch 700: Loss 0.099518307514954, Accuracy 0.9202453987730062
+    Epoch 800: Loss 0.09799491669757482, Accuracy 0.9325153374233128
     Epoch 900: Loss 0.09839336828285081, Accuracy 0.9263803680981595
     Epoch 1000: Loss 0.09765980921693126, Accuracy 0.9263803680981595
     
@@ -7225,7 +7235,7 @@ plt.show()
 
 
     
-![png](output_224_0.png)
+![png](output_225_0.png)
     
 
 
@@ -7248,7 +7258,7 @@ plt.show()
 
 
     
-![png](output_225_0.png)
+![png](output_226_0.png)
     
 
 
@@ -7271,7 +7281,7 @@ plt.show()
 
 
     
-![png](output_226_0.png)
+![png](output_227_0.png)
     
 
 
@@ -7569,7 +7579,7 @@ plt.show()
 
 
     
-![png](output_231_0.png)
+![png](output_232_0.png)
     
 
 
@@ -7672,14 +7682,14 @@ plt.show()
 
 
     
-![png](output_233_0.png)
+![png](output_234_0.png)
     
 
 
 # 2. Summary <a class="anchor" id="Summary"></a>
 
 
-![Project48_Summary.png](attachment:e1504554-f852-4b7b-bc85-005132bab59e.png)
+![Project48_Summary.png](e7e9bf01-4de8-4281-954d-d3ed0c180dce.png)
 
 # 3. References <a class="anchor" id="References"></a>
 
